@@ -9,7 +9,7 @@ export default function Hero() {
           </span>
 
           <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-950 sm:text-6xl sm:leading-[1.05]">
-            15 типових помилок
+            10 типових помилок
             <span className="block bg-gradient-to-r from-emerald-950 via-emerald-800 to-teal-700 bg-clip-text text-transparent">в англійській</span>
           </h1>
 
@@ -25,13 +25,13 @@ export default function Hero() {
             Почати тест <span aria-hidden="true" className="ml-2">→</span>
           </a>
 
-          <p className="mt-4 text-sm font-medium text-slate-500">Без реєстрації · 15 коротких питань</p>
+          <p className="mt-4 text-sm font-medium text-slate-500">Без реєстрації · 10 коротких питань</p>
         </div>
 
         <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-3 sm:mt-16 sm:gap-5">
           {[
-            ["15", "питань"],
-            ["10 хв", "на проходження"],
+            ["10", "питань"],
+            ["7 хв", "на проходження"],
             ["100%", "корисно"],
           ].map(([value, label]) => (
             <div key={label} className="rounded-2xl border border-white/80 bg-white/75 px-3 py-4 text-center shadow-sm backdrop-blur sm:px-5 sm:py-5">

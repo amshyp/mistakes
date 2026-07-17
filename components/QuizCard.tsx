@@ -28,6 +28,8 @@ export default function QuizCard({
   totalQuestions,
 }: Props) {
   const progress = (questionNumber / totalQuestions) * 100;
+  const [ukrainianQuestion, englishQuestion, ...questionDetails] = question.split("\n\n");
+  const [englishFunNote, ukrainianFunNote] = example.split("\n\n");
 
   function selectAnswer(answerIndex: number) {
     if (selectedAnswer !== null) {
@@ -50,7 +52,15 @@ export default function QuizCard({
       </div>
 
       <div className="p-5 sm:p-8">
-        <h2 className="text-xl font-bold leading-snug text-slate-950 sm:text-2xl">{question}</h2>
+        <h2 className="leading-snug text-slate-950">
+          <span className="block text-xl font-bold sm:text-2xl">{ukrainianQuestion}</span>
+          <span className="mt-2 block text-lg font-medium text-slate-700 sm:text-xl">{englishQuestion}</span>
+          {questionDetails.map((detail) => (
+            <span key={detail} className="mt-2 block text-base font-semibold text-slate-800 sm:text-lg">
+              {detail}
+            </span>
+          ))}
+        </h2>
 
         <div className="mt-7 space-y-3">
           {options.map((option, index) => {
@@ -84,7 +94,11 @@ export default function QuizCard({
             <div className="rounded-2xl bg-emerald-50 p-5 text-slate-700">
               <p className="font-bold text-emerald-950">💡 Пояснення</p>
               <p className="mt-2 leading-7">{tip}</p>
-              <p className="mt-3 border-t border-emerald-100 pt-3 text-sm font-medium leading-6 text-emerald-900">Приклад: {example}</p>
+              <div className="mt-3 border-t border-emerald-100 pt-3 leading-6 text-emerald-900">
+                <p className="font-bold text-emerald-950">🤭 Fun note</p>
+                <p className="mt-2 text-base font-semibold">{englishFunNote}</p>
+                <p className="mt-1 text-sm font-normal">{ukrainianFunNote}</p>
+              </div>
             </div>
             <button
               type="button"

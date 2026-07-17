@@ -9,124 +9,124 @@ export type Mistake = {
 
 const mistakes: Mistake[] = [
   {
+    id: 4,
+    question: `Я зробив селфі й одразу пошкодував про це.
+
+I ___ a selfie and immediately regretted it.`,
+    options: ["made", "did", "took"],
+    answer: 2,
+    tip: "Для слів photo та selfie в англійській завжди використовується дієслово take (take a photo, take a selfie).",
+    example: `The front camera has no mercy.
+
+Фронтальна камера не знає жалю.`,
+  },
+  {
     id: 1,
-    question: "Оберіть правильний варіант: «Я з тобою згоден». ",
-    options: ["I agree with you.", "I am agree with you.", "I agree to you."],
-    answer: 0,
-    tip: "Agree — це дієслово, тому після I не потрібне am. З людиною вживаємо прийменник with.",
-    example: "We agree with our teacher.",
+    question: `Я дуже люблю розмовляти зі своїм котом англійською.
+
+I ___ talking to my cat in English.`,
+    options: ["very like", "really like", "much like"],
+    answer: 1,
+    tip: "В англійській мові very (дуже) вживається лише з прикметниками та прислівниками (наприклад, very beautiful — дуже красивий), але не ставиться перед дієсловами.",
+    example: `Congratulations! Your English is now slightly better than your cat's.
+
+Вітаємо! Тепер ваша англійська вже трохи краща, ніж у вашого кота.`,
   },
   {
     id: 2,
-    question: "Оберіть правильний варіант: «У нас не так багато часу». ",
-    options: ["We don't have many time.", "We don't have much time.", "We don't have a lot time."],
+    question: `Я витратив усі свої гроші на каву.
+
+I spent all my money ___ coffee.`,
+    options: ["for", "on", "to"],
     answer: 1,
-    tip: "Much вживаємо з незлічуваними іменниками, а time — незлічуваний.",
-    example: "How much water do you drink?",
+    tip: "Конструкція spend money on something (витратити гроші на щось) є стійким виразом в англійській мові.",
+    example: `Financially irresponsible. Grammatically perfect.
+
+Фінансово безвідповідально. Граматично бездоганно.`,
   },
   {
     id: 3,
-    question: "Оберіть правильний варіант: «Вона сказала мені правду». ",
-    options: ["She said me the truth.", "She told the truth me.", "She told me the truth."],
-    answer: 2,
-    tip: "Tell вживаємо з людиною-адресатом: tell somebody something. Після say потрібен to: say something to somebody.",
-    example: "He said hello to me.",
-  },
-  {
-    id: 4,
-    question: "Оберіть правильний варіант: «Я зробив домашнє завдання». ",
-    options: ["I made my homework.", "I did my homework.", "I created my homework."],
+    question: `Я хотів лягти спати раніше, але відкрив Instagram.
+
+I wanted to ___ early, but I opened Instagram.`,
+    options: ["go in bed", "go to bed", "go into bed"],
     answer: 1,
-    tip: "Зі homework вживаємо do. Make частіше означає створити або виготовити щось.",
-    example: "She made a cake for the party.",
+    tip: "Фраза go to bed є стійким англійським виразом, де прийменник to вказує напрямок руху.",
+    example: `Five minutes on Instagram usually means one hour.
+
+П'ять хвилин в Instagram зазвичай означають одну годину.`,
   },
   {
     id: 5,
-    question: "Оберіть правильний варіант: «Ти дуже добре говориш англійською». ",
-    options: ["You speak English very good.", "You speak English very well.", "You speak English very better."],
+    question: `Я вже три рази починав ходити в спортзал цього року.
+
+I ___ going to the gym three times this year.`,
+    options: ["started", "have started", "start"],
     answer: 1,
-    tip: "Good — прикметник, а well — прислівник. Воно описує дієслово speak.",
-    example: "This is a good book.",
+    tip: "Коли говоримо про події протягом періоду, який ще не закінчився (this year), використовуємо Present Perfect.",
+    example: `Buying sportswear doesn't count as exercise.
+
+Купити спортивний одяг не рахується за вправу.`,
   },
   {
     id: 6,
-    question: "Оберіть правильний варіант: «Чи можеш ти позичити мені свою ручку?» ",
-    options: ["Can you borrow me your pen?", "Can you lend me your pen?", "Can you give me your pen for ever?"],
+    question: `Учора я випадково купив шість бананів.
+
+Yesterday I accidentally ___ six bananas.`,
+    options: ["buyed", "bought", "did buy"],
     answer: 1,
-    tip: "Lend — дати комусь у тимчасове користування. Borrow — взяти в когось у тимчасове користування.",
-    example: "Can I borrow your dictionary?",
+    tip: "Дієслово buy (купувати) є неправильним. Його три форми: buy – bought – bought. У часі Past Simple використовується друга форма — bought.",
+    example: `Bananas were on sale. That's the only explanation.
+
+Банани були по акції. Іншого пояснення немає.`,
   },
   {
     id: 7,
-    question: "Оберіть правильний варіант: «Я живу тут уже п'ять років». ",
-    options: ["I have lived here since five years.", "I have lived here for five years.", "I live here from five years."],
+    question: `Я не можу знайти свої окуляри, бо вони на мені.
+
+I can't find my glasses because I'm ___ them.`,
+    options: ["dressing", "wearing", "carrying"],
     answer: 1,
-    tip: "For показує тривалість періоду, а since — його початкову точку.",
-    example: "I have lived here since 2021.",
+    tip: "Wear означає носити одяг, окуляри чи інші речі на собі.",
+    example: `The glasses were closer than expected.
+
+Окуляри були ближче, ніж очікувалося.`,
   },
   {
     id: 8,
-    question: "Оберіть правильний варіант: «Покажи мені інший варіант». ",
-    options: ["Show me other option.", "Show me another option.", "Show me the another option."],
+    question: `Мені потрібна порада, як перестати купувати речі на Temu.
+
+I need ___ advice on how to stop shopping on Temu.`,
+    options: ["an", "some", "the"],
     answer: 1,
-    tip: "Another означає «ще один / інший» перед іменником в однині. Other зазвичай вживаємо з множиною або перед another іменником.",
-    example: "Other students are waiting outside.",
+    tip: "Слово some використовується перед незліченними іменниками в ствердних реченнях, коли кількість не вказана точно. Some advice українською перекладається як «порада» або «кілька порад».",
+    example: `Step one: close the Temu app.
+
+Крок перший: закрий застосунок Temu.`,
   },
   {
     id: 9,
-    question: "Оберіть правильний варіант: «У цьому році стало менше помилок». ",
-    options: ["There are less mistakes this year.", "There are fewer mistakes this year.", "There are little mistakes this year."],
+    question: `Якщо моя кава зникне, я буду дуже злий.
+
+If my coffee disappears, I ___ very angry.`,
+    options: ["will", "will be", "am"],
     answer: 1,
-    tip: "Fewer вживаємо зі злічуваними іменниками у множині, а less — з незлічуваними.",
-    example: "I drink less coffee now.",
+    tip: "Після допоміжного дієслова will завжди використовується інфінітив дієслова (його початкова форма).",
+    example: `This is no longer an English lesson. It's an emergency.
+
+Це вже не урок англійської. Це надзвичайна ситуація.`,
   },
   {
     id: 10,
-    question: "Оберіть правильний варіант: «Чи є в холодильнику молоко?» ",
-    options: ["Is there some milk in the fridge?", "Is there any milk in the fridge?", "Is there many milk in the fridge?"],
+    question: `Мій кіт ігнорує мене вже дві години.
+
+My cat has been ignoring me ___ two hours.`,
+    options: ["since", "for", "from"],
     answer: 1,
-    tip: "У звичайних запитаннях і запереченнях вживаємо any. Some частіше використовуємо у ствердженнях і ввічливих пропозиціях.",
-    example: "Would you like some tea?",
-  },
-  {
-    id: 11,
-    question: "Оберіть правильний варіант: «Я звик рано вставати». ",
-    options: ["I use to get up early.", "I am used to get up early.", "I am used to getting up early."],
-    answer: 2,
-    tip: "Be used to означає «бути звичним до» й вимагає іменника або дієслова з -ing. Used to + інфінітив — це звичка в минулому.",
-    example: "I used to live in Kyiv.",
-  },
-  {
-    id: 12,
-    question: "Оберіть правильний варіант: «Ми прибули до Лондона о восьмій». ",
-    options: ["We arrived to London at eight.", "We arrived in London at eight.", "We arrived at London at eight."],
-    answer: 1,
-    tip: "Arrive in вживаємо з містами й країнами, а arrive at — з конкретними місцями та будівлями.",
-    example: "The train arrived at the station late.",
-  },
-  {
-    id: 13,
-    question: "Оберіть правильний варіант: «Мені цікава ця книга». ",
-    options: ["I am interesting in this book.", "I am interested in this book.", "This book is interested for me."],
-    answer: 1,
-    tip: "Interested описує почуття людини. Interesting описує предмет або явище, яке викликає інтерес.",
-    example: "This book is really interesting.",
-  },
-  {
-    id: 14,
-    question: "Оберіть правильний варіант: «Вона дала мені корисну пораду». ",
-    options: ["She gave me a useful advice.", "She gave me a useful advise.", "She gave me some useful advice."],
-    answer: 2,
-    tip: "Advice — незлічуваний іменник «порада». Advise — дієслово «радити».",
-    example: "I advise you to practise every day.",
-  },
-  {
-    id: 15,
-    question: "Оберіть правильний варіант: «Зараз вона готує вечерю». ",
-    options: ["She cooks dinner now.", "She is cooking dinner now.", "She cooking dinner now."],
-    answer: 1,
-    tip: "Present Continuous використовуємо для дії, яка відбувається зараз. Present Simple — для звичок, фактів і розкладів.",
-    example: "She cooks dinner every evening.",
+    tip: "Коли говоримо про проміжок часу, в англійській мові використовується прийменник for.",
+    example: `Apparently, ignoring you is his full-time job.
+
+Схоже, ігнорувати вас — це його робота на повний день.`,
   },
 ];
 

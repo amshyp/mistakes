@@ -9,18 +9,40 @@ type Props = {
   questions: Mistake[];
 };
 
-function getResultMessage(score: number, total: number) {
-  const percentage = (score / total) * 100;
-
-  if (percentage === 100) {
-    return "Вау! У Вас чудове відчуття англійської. Продовжуйте в тому ж дусі!";
+function getResultMessage(score: number) {
+  if (score >= 9) {
+    return "Відмінний результат! Продовжуйте вдосконалювати англійську та відкривати для себе нові теми.";
   }
 
-  if (percentage >= 60) {
-    return "Дуже хороший результат! Кілька точних пояснень — і Ваша англійська звучатиме ще впевненіше.";
+  if (score >= 7) {
+    return "Дуже хороший результат! Ви вже маєте гарну базу, залишилося лише відшліфувати окремі моменти.";
   }
 
-  return "Чудовий старт! Саме такі деталі найкраще відпрацьовувати з викладачем на практиці.";
+  if (score >= 5) {
+    return "Гарний початок! Кілька тем ще потребують уваги, але їх легко покращити регулярною практикою.";
+  }
+
+  if (score >= 3) {
+    return "Гарний початок! Ви вже знаєте чимало, а решту легко надолужити з практикою.";
+  }
+
+  return "Кожна правильна відповідь — це крок уперед. Головне — почати, а далі все вийде!";
+}
+
+function BilingualQuestion({ text }: { text: string }) {
+  const [ukrainian, english, ...details] = text.split("\n\n");
+
+  return (
+    <p className="leading-7 text-slate-950">
+      <span className="block font-bold">{ukrainian}</span>
+      <span className="mt-1 block text-sm font-normal text-slate-700">{english}</span>
+      {details.map((detail) => (
+        <span key={detail} className="mt-1 block text-sm font-medium text-slate-800">
+          {detail}
+        </span>
+      ))}
+    </p>
+  );
 }
 
 export default function Quiz({ questions }: Props) {
@@ -65,6 +87,7 @@ export default function Quiz({ questions }: Props) {
 
   if (isComplete) {
     const incorrectQuestions = questions.filter((question) => userAnswers[question.id] !== question.answer);
+    const resultMessage = getResultMessage(score);
 
     return (
       <>
@@ -73,7 +96,9 @@ export default function Quiz({ questions }: Props) {
           <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-emerald-800">Тест завершено</p>
           <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Ваш результат</h2>
           <p className="mt-5 text-5xl font-black text-emerald-800">{score}<span className="text-2xl text-slate-400">/{questions.length}</span></p>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-slate-600">{getResultMessage(score, questions.length)}</p>
+          <div className="mx-auto mt-5 max-w-xl leading-7 text-slate-600">
+            <p className="text-base font-medium">{resultMessage}</p>
+          </div>
         </section>
         <section className="mt-10 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/5 sm:p-10">
           <div className="text-center">
@@ -82,12 +107,15 @@ export default function Quiz({ questions }: Props) {
             <p className="mt-3 text-slate-600">Перегляньте ці пояснення — вони допоможуть закріпити правило.</p>
           </div>
           {incorrectQuestions.length === 0 ? (
-            <p className="mt-7 rounded-2xl bg-emerald-50 p-5 text-center font-semibold text-emerald-950">Ви не припустилися помилок — чудова робота!</p>
+            <div className="mt-7 rounded-2xl bg-emerald-50 p-5 text-center text-emerald-950">
+              <p className="font-semibold">Ви не припустилися помилок — чудова робота!</p>
+              <p className="mt-1 text-sm font-normal">You made no mistakes — great job!</p>
+            </div>
           ) : (
             <div className="mt-7 space-y-5">
               {incorrectQuestions.map((question) => (
                 <article key={question.id} className="rounded-2xl border border-rose-100 bg-rose-50/40 p-5 sm:p-6">
-                  <p className="font-bold leading-7 text-slate-950">{question.question}</p>
+                  <BilingualQuestion text={question.question} />
                   <dl className="mt-4 grid gap-3 text-sm leading-6 sm:grid-cols-2">
                     <div>
                       <dt className="font-bold text-rose-700">Ваша відповідь</dt>
