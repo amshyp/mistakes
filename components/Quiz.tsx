@@ -134,7 +134,7 @@ export default function Quiz({ questions }: Props) {
             </div>
           )}
         </section>
-        <ContactSection />
+        <ContactSection currentQuizScore={score} totalQuestions={questions.length} />
       </>
     );
   }
