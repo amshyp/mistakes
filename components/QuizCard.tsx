@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 type Props = {
   question: string;
   options: string[];
@@ -27,9 +29,33 @@ export default function QuizCard({
   questionNumber,
   totalQuestions,
 }: Props) {
+  const feedbackRef = useRef<HTMLDivElement>(null);
   const progress = (questionNumber / totalQuestions) * 100;
   const [ukrainianQuestion, englishQuestion, ...questionDetails] = question.split("\n\n");
   const [englishFunNote, ukrainianFunNote] = example.split("\n\n");
+
+  useEffect(() => {
+    if (selectedAnswer === null) {
+      return;
+    }
+
+    const scrollTimer = window.setTimeout(() => {
+      const feedback = feedbackRef.current;
+
+      if (!feedback) {
+        return;
+      }
+
+      const rect = feedback.getBoundingClientRect();
+
+      window.scrollTo({
+        top: window.scrollY + rect.top - 120,
+        behavior: "smooth",
+      });
+    }, 350);
+
+    return () => window.clearTimeout(scrollTimer);
+  }, [selectedAnswer]);
 
   function selectAnswer(answerIndex: number) {
     if (selectedAnswer !== null) {
@@ -90,7 +116,7 @@ export default function QuizCard({
         </div>
 
         {selectedAnswer !== null && (
-          <div className="mt-6">
+          <div ref={feedbackRef} className="mt-6">
             <div className="rounded-2xl bg-emerald-50 p-5 text-slate-700">
               <p className="font-bold text-emerald-950">💡 Пояснення</p>
               <p className="mt-2 leading-7">{tip}</p>

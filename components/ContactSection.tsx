@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FormEvent, useState } from "react";
 
 type Props = {
@@ -68,8 +69,25 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
   }
 
   return (
-    <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 sm:mt-14 sm:px-10 sm:py-12">
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
+    <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12">
+      <div
+        aria-hidden={isFormOpen}
+        className={`grid text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out md:hidden ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0" : "translate-y-0 grid-rows-[1fr] opacity-100"}`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <Image
+            src="/images/teacher.png"
+            alt="Аліса Кириченко, викладач англійської"
+            width={105}
+            height={105}
+            className="mx-auto size-[105px] rounded-full bg-white object-contain shadow-lg"
+          />
+          <p className="mt-3 font-bold">Аліса Кириченко</p>
+          <p className="mt-1 text-sm text-emerald-100">Викладач англійської 🇬🇧</p>
+        </div>
+      </div>
+
+      <div className={`grid gap-8 transition-[margin] duration-300 md:mt-0 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12 ${isFormOpen ? "mt-0" : "mt-8"}`}>
         <div>
           <span className="inline-flex rounded-full bg-emerald-400/15 px-3 py-1.5 text-sm font-semibold text-emerald-100">Наступний крок</span>
           <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-4xl">Записуйтеся на безкоштовне тестове заняття-знайомство.</h2>
@@ -77,6 +95,22 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
         </div>
 
         <div>
+          <div
+            aria-hidden={isFormOpen}
+            className={`hidden text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out md:grid ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 md:mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 md:mb-5"}`}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <Image
+                src="/images/teacher.png"
+                alt="Аліса Кириченко, викладач англійської"
+                width={130}
+                height={130}
+                className="mx-auto size-[130px] rounded-full bg-white object-contain shadow-lg"
+              />
+              <p className="mt-3 font-bold">Аліса Кириченко</p>
+              <p className="mt-1 text-sm text-emerald-100">Викладач англійської 🇬🇧</p>
+            </div>
+          </div>
           <a
             href="https://t.me/alisakerry"
             target="_blank"
@@ -92,14 +126,14 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
             aria-controls="contact-form-panel"
             onClick={() => setIsFormOpen((isOpen) => !isOpen)}
           >
-            Або залиште контакт, і ми самі вам напишемо.
+            {isFormOpen ? "Сховати форму" : "Або залиште контакт, і ми самі вам напишемо."}
           </button>
 
           <div
             id="contact-form-panel"
             aria-hidden={!isFormOpen}
             inert={!isFormOpen}
-            className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out ${isFormOpen ? "mt-5 grid-rows-[1fr] opacity-100" : "mt-0 grid-rows-[0fr] opacity-0"}`}
+            className={`grid transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out ${isFormOpen ? "mt-5 translate-y-0 grid-rows-[1fr] opacity-100" : "-translate-y-2 mt-0 grid-rows-[0fr] opacity-0"}`}
           >
             <div className="min-h-0 overflow-hidden">
               {submitted ? (
@@ -116,7 +150,6 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
                     Телефон або Telegram
                     <input id="phone-or-telegram" name="phone_or_telegram" required maxLength={200} placeholder="@username або +380…" className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100" />
                   </label>
-                  <p className="mt-2 text-xs leading-5 text-slate-500">Наприклад: +380 XX XXX XX XX або @username</p>
                   <div className="sr-only" aria-hidden="true">
                     <label htmlFor="website">Ваш сайт</label>
                     <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
