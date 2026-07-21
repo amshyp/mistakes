@@ -69,7 +69,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
   }
 
   return (
-    <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12">
+    <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12 lg:py-10">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
         <div>
           <span className="inline-flex rounded-full bg-emerald-400/15 px-3 py-1.5 text-sm font-semibold text-emerald-100">Наступний крок</span>
@@ -77,10 +77,10 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
           <p className="mt-5 max-w-xl leading-7 text-slate-300">Визначимо ваш рівень англійської та складемо індивідуальний план навчання.</p>
         </div>
 
-        <div>
+        <div className="lg:flex lg:h-[360px] lg:flex-col lg:justify-center">
           <div
             aria-hidden={isFormOpen}
-            className={`grid text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 mb-5"}`}
+            className={`grid text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 mb-0"}`}
           >
             <div className="min-h-0 overflow-hidden">
               <Image
@@ -92,16 +92,16 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
               />
               <p className="mt-3 font-bold">Аліса Кириченко</p>
               <p className="mt-1 text-sm text-emerald-100">Викладач англійської</p>
+              <a
+                href="https://t.me/alisakerry"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3.5 font-bold text-white shadow-lg shadow-orange-700/20 transition hover:bg-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-200"
+              >
+                Написати нам у Telegram
+              </a>
             </div>
           </div>
-          <a
-            href="https://t.me/alisakerry"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3.5 font-bold text-white shadow-lg shadow-orange-700/20 transition hover:bg-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-200"
-          >
-            💬 Написати нам у Telegram
-          </a>
           <button
             type="button"
             className="mx-auto mt-3 block text-center text-sm text-emerald-100/80 transition hover:text-white hover:underline focus:outline-none focus:underline"
@@ -124,7 +124,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
                   <p className="text-lg font-extrabold">Дякуємо! Ми скоро з вами зв&apos;яжемося 😊</p>
                 </div>
               ) : (
-                <form className="rounded-2xl bg-white p-5 text-slate-950 sm:p-6" onSubmit={handleSubmit}>
+                <form className="rounded-2xl bg-white p-5 text-slate-950 sm:p-6 lg:py-2" onSubmit={handleSubmit}>
                   <label className="block text-sm font-bold" htmlFor="name">
                     Ваше ім&apos;я
                     <input id="name" name="name" required maxLength={100} placeholder="Ваше ім'я" className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100" />

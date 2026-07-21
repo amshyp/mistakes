@@ -39,7 +39,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950">
+    <main className="min-h-screen bg-gradient-to-br from-[#FFF7ED] via-[#F7FEE7] to-[#ECFDF5] text-slate-950">
       <Hero onStartQuiz={handleStartQuiz} />
 
       <section id="quiz" className="scroll-mt-6 px-5 pb-20 sm:px-8 sm:pb-28">

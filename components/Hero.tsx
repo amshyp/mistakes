@@ -9,11 +9,10 @@ type Props = {
 export default function Hero({ onStartQuiz }: Props) {
   return (
     <section className="relative overflow-hidden px-5 pb-16 pt-8 sm:px-8 sm:pb-24 sm:pt-12">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[30rem] bg-gradient-to-b from-emerald-100 via-stone-50 to-transparent" />
       <div className="mx-auto max-w-5xl">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm backdrop-blur">
-            ✦ Безкоштовний інтерактивний тест
+            ✦ Інтерактивний тест
           </span>
 
           <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-950 sm:text-6xl sm:leading-[1.05]">
