@@ -70,24 +70,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
 
   return (
     <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12">
-      <div
-        aria-hidden={isFormOpen}
-        className={`grid text-center transition-[grid-template-rows,opacity,transform] duration-300 ease-out md:hidden ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0" : "translate-y-0 grid-rows-[1fr] opacity-100"}`}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <Image
-            src="/images/teacher.png"
-            alt="Аліса Кириченко, викладач англійської"
-            width={105}
-            height={105}
-            className="mx-auto size-[105px] rounded-full bg-white object-contain shadow-lg"
-          />
-          <p className="mt-3 font-bold">Аліса Кириченко</p>
-          <p className="mt-1 text-sm text-emerald-100">Викладач англійської 🇬🇧</p>
-        </div>
-      </div>
-
-      <div className={`grid gap-8 transition-[margin] duration-300 md:mt-0 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12 ${isFormOpen ? "mt-0" : "mt-8"}`}>
+      <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
         <div>
           <span className="inline-flex rounded-full bg-emerald-400/15 px-3 py-1.5 text-sm font-semibold text-emerald-100">Наступний крок</span>
           <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-4xl">Записуйтеся на безкоштовне тестове заняття-знайомство.</h2>
@@ -97,7 +80,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
         <div>
           <div
             aria-hidden={isFormOpen}
-            className={`hidden text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out md:grid ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 md:mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 md:mb-5"}`}
+            className={`grid text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 mb-5"}`}
           >
             <div className="min-h-0 overflow-hidden">
               <Image
@@ -105,10 +88,10 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
                 alt="Аліса Кириченко, викладач англійської"
                 width={130}
                 height={130}
-                className="mx-auto size-[130px] rounded-full bg-white object-contain shadow-lg"
+                className="mx-auto size-[105px] rounded-full bg-white object-contain shadow-lg md:size-[130px]"
               />
               <p className="mt-3 font-bold">Аліса Кириченко</p>
-              <p className="mt-1 text-sm text-emerald-100">Викладач англійської 🇬🇧</p>
+              <p className="mt-1 text-sm text-emerald-100">Викладач англійської</p>
             </div>
           </div>
           <a

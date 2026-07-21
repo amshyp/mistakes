@@ -1,4 +1,12 @@
-export default function Hero() {
+"use client";
+
+import type { MouseEventHandler } from "react";
+
+type Props = {
+  onStartQuiz: MouseEventHandler<HTMLAnchorElement>;
+};
+
+export default function Hero({ onStartQuiz }: Props) {
   return (
     <section className="relative overflow-hidden px-5 pb-16 pt-8 sm:px-8 sm:pb-24 sm:pt-12">
       <div className="absolute inset-x-0 top-0 -z-10 h-[30rem] bg-gradient-to-b from-emerald-100 via-stone-50 to-transparent" />
@@ -18,27 +26,26 @@ export default function Hero() {
             конструкції варто прокачати вже сьогодні.
           </p>
 
+          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-3 sm:mt-16 sm:gap-5">
+            {[
+              ["10", "питань"],
+              ["7 хв", "на проходження"],
+              ["100%", "корисно"],
+            ].map(([value, label]) => (
+              <div key={label} className="rounded-2xl border border-white/80 bg-white/75 px-3 py-4 text-center shadow-sm backdrop-blur sm:px-5 sm:py-5">
+                <p className="text-lg font-extrabold text-slate-950 sm:text-2xl">{value}</p>
+                <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">{label}</p>
+              </div>
+            ))}
+          </div>
+
           <a
             href="#quiz"
+            onClick={onStartQuiz}
             className="mt-8 inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-bold text-white shadow-lg shadow-emerald-700/25 transition hover:-translate-y-0.5 hover:bg-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
           >
             Почати тест <span aria-hidden="true" className="ml-2">→</span>
           </a>
-
-          <p className="mt-4 text-sm font-medium text-slate-500">Без реєстрації · 10 коротких питань</p>
-        </div>
-
-        <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-3 sm:mt-16 sm:gap-5">
-          {[
-            ["10", "питань"],
-            ["7 хв", "на проходження"],
-            ["100%", "корисно"],
-          ].map(([value, label]) => (
-            <div key={label} className="rounded-2xl border border-white/80 bg-white/75 px-3 py-4 text-center shadow-sm backdrop-blur sm:px-5 sm:py-5">
-              <p className="text-lg font-extrabold text-slate-950 sm:text-2xl">{value}</p>
-              <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">{label}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>

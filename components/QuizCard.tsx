@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
 type Props = {
   question: string;
@@ -14,6 +14,7 @@ type Props = {
   isLastQuestion: boolean;
   questionNumber: number;
   totalQuestions: number;
+  lastVisibleOptionRef: RefObject<HTMLButtonElement | null>;
 };
 
 export default function QuizCard({
@@ -28,8 +29,9 @@ export default function QuizCard({
   isLastQuestion,
   questionNumber,
   totalQuestions,
+  lastVisibleOptionRef,
 }: Props) {
-  const feedbackRef = useRef<HTMLDivElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
   const progress = (questionNumber / totalQuestions) * 100;
   const [ukrainianQuestion, englishQuestion, ...questionDetails] = question.split("\n\n");
   const [englishFunNote, ukrainianFunNote] = example.split("\n\n");
@@ -39,22 +41,35 @@ export default function QuizCard({
       return;
     }
 
-    const scrollTimer = window.setTimeout(() => {
-      const feedback = feedbackRef.current;
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        const nextButton = nextButtonRef.current;
 
-      if (!feedback) {
-        return;
-      }
+        if (!nextButton) {
+          return;
+        }
 
-      const rect = feedback.getBoundingClientRect();
+        const buttonRect = nextButton.getBoundingClientRect();
+        const bottomGap = 24;
+        const visibleBottom = window.innerHeight - bottomGap;
+        const requiredScroll = buttonRect.bottom - visibleBottom;
 
-      window.scrollTo({
-        top: window.scrollY + rect.top - 120,
-        behavior: "smooth",
+        if (requiredScroll <= 0) {
+          return;
+        }
+
+        window.scrollTo({
+          top: window.scrollY + requiredScroll,
+          behavior: "smooth",
+        });
       });
-    }, 350);
+    });
 
-    return () => window.clearTimeout(scrollTimer);
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
   }, [selectedAnswer]);
 
   function selectAnswer(answerIndex: number) {
@@ -101,6 +116,7 @@ export default function QuizCard({
             return (
               <button
                 key={option}
+                ref={index === options.length - 1 ? lastVisibleOptionRef : undefined}
                 type="button"
                 className={`touch-manipulation select-none flex w-full items-center gap-4 rounded-2xl border px-4 py-4 text-left text-base font-semibold transition sm:px-5 ${stateClasses}`}
                 onClick={() => selectAnswer(index)}
@@ -116,7 +132,7 @@ export default function QuizCard({
         </div>
 
         {selectedAnswer !== null && (
-          <div ref={feedbackRef} className="mt-6">
+          <div className="mt-6">
             <div className="rounded-2xl bg-emerald-50 p-5 text-slate-700">
               <p className="font-bold text-emerald-950">💡 Пояснення</p>
               <p className="mt-2 leading-7">{tip}</p>
@@ -127,6 +143,7 @@ export default function QuizCard({
               </div>
             </div>
             <button
+              ref={nextButtonRef}
               type="button"
               className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-orange-500 px-5 py-4 font-bold text-white shadow-lg shadow-orange-700/20 transition hover:bg-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-200 sm:w-auto"
               onClick={onNext}
