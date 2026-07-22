@@ -11,8 +11,8 @@ export default function Hero({ onStartQuiz }: Props) {
     <section className="relative overflow-hidden px-5 pb-16 pt-8 sm:px-8 sm:pb-24 sm:pt-12">
       <div className="mx-auto max-w-5xl">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center rounded-full border border-emerald-200 bg-white/80 px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm backdrop-blur">
-            ✦ Інтерактивний тест
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/60 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur">
+            <span className="text-orange-400">✦</span><span>Інтерактивний тест</span>
           </span>
 
           <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-950 sm:text-6xl sm:leading-[1.05]">
@@ -28,7 +28,7 @@ export default function Hero({ onStartQuiz }: Props) {
           <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-3 sm:mt-16 sm:gap-5">
             {[
               ["10", "питань"],
-              ["7 хв", "на проходження"],
+              ["5 хв", "на проходження"],
               ["100%", "корисно"],
             ].map(([value, label]) => (
               <div key={label} className="rounded-2xl border border-white/80 bg-white/75 px-3 py-4 text-center shadow-sm backdrop-blur sm:px-5 sm:py-5">

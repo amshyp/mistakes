@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 type Props = {
@@ -69,6 +70,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
   }
 
   return (
+    <>
     <section id="contact" className="mt-10 rounded-[1.75rem] bg-emerald-950 px-5 py-10 text-white shadow-xl shadow-emerald-950/20 [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12 lg:py-10">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
         <div>
@@ -77,7 +79,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
           <p className="mt-5 max-w-xl leading-7 text-slate-300">Визначимо ваш рівень англійської та складемо індивідуальний план навчання.</p>
         </div>
 
-        <div className="lg:flex lg:h-[360px] lg:flex-col lg:justify-center">
+        <div className="md:-translate-y-3 lg:flex lg:h-[360px] lg:self-center lg:flex-col lg:justify-center">
           <div
             aria-hidden={isFormOpen}
             className={`grid text-center transition-[grid-template-rows,opacity,transform,margin] duration-300 ease-out ${isFormOpen ? "-translate-y-2 grid-rows-[0fr] opacity-0 mb-0" : "translate-y-0 grid-rows-[1fr] opacity-100 mb-0"}`}
@@ -124,7 +126,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
                   <p className="text-lg font-extrabold">Дякуємо! Ми скоро з вами зв&apos;яжемося 😊</p>
                 </div>
               ) : (
-                <form className="rounded-2xl bg-white p-5 text-slate-950 sm:p-6 lg:py-2" onSubmit={handleSubmit}>
+                <form className="rounded-2xl bg-white p-5 text-slate-950 sm:p-6 lg:pt-4 lg:pb-6" onSubmit={handleSubmit}>
                   <label className="block text-sm font-bold" htmlFor="name">
                     Ваше ім&apos;я
                     <input id="name" name="name" required maxLength={100} placeholder="Ваше ім'я" className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100" />
@@ -148,5 +150,11 @@ export default function ContactSection({ currentQuizScore, totalQuestions }: Pro
         </div>
       </div>
     </section>
+    <div className="mt-16 flex justify-center">
+      <Link href="/" className="inline-flex items-center rounded-full bg-white/60 px-4 py-2 text-sm font-light text-slate-500 shadow-sm backdrop-blur transition-colors hover:text-slate-700">
+        ← До всіх тестів
+      </Link>
+    </div>
+    </>
   );
 }
