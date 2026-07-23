@@ -687,7 +687,7 @@ export default function AliceWonderlandTest() {
   }
 
   return (
-    <main className={`${styles.wonderlandPage} relative overflow-x-hidden max-sm:outline-2 max-sm:outline-red-500`}>
+    <main className={`${styles.wonderlandPage} relative overflow-x-hidden`}>
       <WonderlandStars />
       <div className="relative z-10">
         <WonderlandHero
