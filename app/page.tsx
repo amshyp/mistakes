@@ -15,11 +15,11 @@ export default function Home() {
           </span>
 
           <h1 className="mx-auto mt-7 max-w-3xl text-4xl font-black tracking-tight sm:text-6xl sm:leading-[1.05]">
-            Перевірте свою <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">англійську</span>
+            Вивчайте англійську <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">цікаво</span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
-            Короткі інтерактивні тести, які допоможуть знайти типові помилки, перевірити знання та краще зрозуміти англійську.
+            Обирайте інтерактивні тести, складайте речення, відкривайте цікаві факти та вдосконалюйте англійську крок за кроком.
           </p>
         </div>
       </section>

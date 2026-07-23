@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Henny_Penny } from "next/font/google";
+import { Griffy } from "next/font/google";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ContactSection from "@/components/ContactSection";
+import WonderlandHeroTitle from "@/components/WonderlandHeroTitle";
 import {
   wonderlandQuestions,
   type WonderlandQuestion,
@@ -11,9 +12,10 @@ import {
 } from "@/data/wonderlandQuestions";
 import styles from "./Wonderland.module.css";
 
-const hennyPenny = Henny_Penny({
+const griffy = Griffy({
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
 });
 
 type AnswerStatus = "building" | "incorrect" | "correct";
@@ -43,7 +45,7 @@ const wonderlandStars = [
 
 function WonderlandStars() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden sm:block" aria-hidden="true">
       {wonderlandStars.map((star, index) => (
         <span
           key={`${star.top}-${star.left}`}
@@ -156,7 +158,7 @@ function WonderlandHero({
   return (
     <header className="mx-auto max-w-6xl px-5 pb-20 pt-20 text-center sm:px-8 sm:pb-28 sm:pt-24">
       <div className="mx-auto max-w-5xl">
-        <div className="relative isolate z-20 mx-auto w-fit px-8 sm:px-14">
+        <div className="relative z-20 mx-auto w-fit px-8 sm:px-14">
           <span className={`${styles.sparkle} absolute left-1 top-[18%] z-0 text-xl sm:left-3 sm:text-2xl`} style={{ animationDuration: "2.8s", animationDelay: "-0.7s" }} aria-hidden="true">✦</span>
           <span className={`${styles.sparkle} absolute right-1 top-[8%] z-0 text-sm sm:right-5 sm:text-lg`} style={{ animationDuration: "3.6s", animationDelay: "-2.1s" }} aria-hidden="true">⋆</span>
           <span className={`${styles.sparkle} absolute bottom-[17%] right-3 z-0 text-lg text-violet-300 sm:right-7 sm:text-xl`} style={{ animationDuration: "4.2s", animationDelay: "-1.4s" }} aria-hidden="true">✦</span>
@@ -165,11 +167,9 @@ function WonderlandHero({
           <span className={`${styles.sparkle} absolute -right-1 top-[48%] z-0 text-xs text-violet-300 sm:right-1 sm:text-base`} style={{ animationDuration: "3.8s", animationDelay: "-0.9s" }} aria-hidden="true">⋆</span>
           <span className={`${styles.sparkle} absolute left-[17%] top-[45%] z-0 text-[0.6rem] sm:text-xs`} style={{ animationDuration: "2.6s", animationDelay: "-1.8s" }} aria-hidden="true">⋆</span>
           <span className={`${styles.sparkle} absolute right-[16%] top-[43%] z-0 text-[0.65rem] text-violet-300 sm:text-sm`} style={{ animationDuration: "4s", animationDelay: "-2.9s" }} aria-hidden="true">✦</span>
-          <h1 className={`${hennyPenny.className} ${styles.aliceTitle} relative z-20 text-[clamp(2.55rem,7.8vw,5.4rem)] leading-[0.72]`}>
-            <span className="block">Alice</span>
-            <span className="relative z-10 my-3 block text-[0.25em] italic leading-none tracking-normal sm:my-4">in</span>
-            <span className="block">Wonderland</span>
-          </h1>
+          <WonderlandHeroTitle
+            className={`${styles.aliceTitleSvg} relative z-20 text-[clamp(2.55rem,7.8vw,5.4rem)]`}
+          />
         </div>
         <p className="mx-auto mt-10 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
           Складайте англійські речення, відкривайте їхні приховані значення та рухайтеся далі Країною див.
@@ -344,7 +344,7 @@ function MagicalFactCard({ question, onContinue, continueButtonRef }: MagicalFac
 
   return (
     <aside className={`${styles.panel} mt-7 rounded-3xl border-amber-300/30 p-5 text-slate-200 sm:p-7`}>
-      <h3 className={`${hennyPenny.className} ${styles.wonderlandChapterText} text-2xl`}>{question.curiousFactTitle}</h3>
+      <h3 className={`${griffy.className} ${styles.wonderlandChapterText} text-2xl`}>{question.curiousFactTitle}</h3>
       <div className="mt-4 space-y-4 text-sm leading-6 sm:text-base sm:leading-7">
         {question.curiousFactText.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         {question.curiousFactExample && (
@@ -383,11 +383,11 @@ function WonderlandChapterHeading({ chapterNumber, title, countLabel }: Wonderla
     <div className="flex min-h-16 items-baseline justify-between gap-5 sm:gap-7">
       <div className="flex min-w-0 items-center gap-3">
         <span className={`${styles.wonderlandChapterBadge} inline-flex size-9 shrink-0 items-center justify-center rounded-full`}>
-          <span className={`${hennyPenny.className} ${styles.wonderlandChapterText} text-[0.9375rem] leading-none`}>
+          <span className={`${griffy.className} ${styles.wonderlandChapterText} text-[0.9375rem] leading-none`}>
             {String(chapterNumber).padStart(2, "0")}
           </span>
         </span>
-        <h2 className={`${hennyPenny.className} ${styles.wonderlandChapterText} min-w-0 text-xl sm:text-2xl`}>
+        <h2 className={`${griffy.className} ${styles.wonderlandChapterText} min-w-0 text-xl sm:text-2xl`}>
           {title}
         </h2>
       </div>
@@ -687,7 +687,7 @@ export default function AliceWonderlandTest() {
   }
 
   return (
-    <main className={`${styles.wonderlandPage} relative isolate min-h-screen overflow-x-hidden`}>
+    <main className={`${styles.wonderlandPage} relative overflow-x-hidden max-sm:outline-2 max-sm:outline-red-500`}>
       <WonderlandStars />
       <div className="relative z-10">
         <WonderlandHero
