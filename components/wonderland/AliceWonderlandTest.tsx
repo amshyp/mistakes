@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Griffy } from "next/font/google";
+import { Mystery_Quest } from "next/font/google";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ContactSection from "@/components/ContactSection";
 import WonderlandHeroTitle from "@/components/WonderlandHeroTitle";
@@ -12,7 +12,7 @@ import {
 } from "@/data/wonderlandQuestions";
 import styles from "./Wonderland.module.css";
 
-const griffy = Griffy({
+const mysteryQuest = Mystery_Quest({
   weight: "400",
   subsets: ["latin"],
   display: "swap",
@@ -20,7 +20,7 @@ const griffy = Griffy({
 
 type AnswerStatus = "building" | "incorrect" | "correct";
 
-const rabbitTopPositions = [8, 50, 90];
+const buttonScrollDuration = 600;
 
 const wonderlandStars = [
   { top: "3%", left: "6%", size: "0.7rem", duration: "5.2s", delay: "-1.4s", color: "var(--wl-gold)" },
@@ -70,6 +70,26 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function scrollByWithDuration(distance: number, duration: number) {
+  if (prefersReducedMotion()) {
+    window.scrollBy({ top: distance, behavior: "auto" });
+    return;
+  }
+
+  const startPosition = window.scrollY;
+  const startTime = performance.now();
+
+  function animate(currentTime: number) {
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo({ top: startPosition + distance * easedProgress });
+
+    if (progress < 1) window.requestAnimationFrame(animate);
+  }
+
+  window.requestAnimationFrame(animate);
+}
+
 function shuffleOrder(ids: string[]) {
   const shuffled = [...ids];
 
@@ -93,13 +113,12 @@ function unsolvedOrder(ids: string[]) {
 function normalizeAnswerText(value: string) {
   return value
     .trim()
-    .toLocaleLowerCase("en")
     .replace(/\s+/g, " ")
     .replace(/[.!?]+$/, "");
 }
 
-function WhiteRabbitMarker({ progress }: { progress: number }) {
-  const top = rabbitTopPositions[progress];
+function WhiteRabbitMarker({ progress, totalCount }: { progress: number; totalCount: number }) {
+  const top = 8 + (Math.min(progress, totalCount) / totalCount) * 82;
 
   return (
     <span
@@ -112,7 +131,7 @@ function WhiteRabbitMarker({ progress }: { progress: number }) {
   );
 }
 
-function WonderlandMap({ progress }: { progress: number }) {
+function WonderlandMap({ progress, totalCount }: { progress: number; totalCount: number }) {
   return (
     <aside className={`${styles.panel} relative min-h-[360px] overflow-hidden rounded-[2rem] p-6 sm:p-8`} aria-label="Маршрут подорожі">
       <div className="flex items-center justify-between gap-4">
@@ -121,13 +140,13 @@ function WonderlandMap({ progress }: { progress: number }) {
           <h2 className={`${styles.displaySerif} mt-2 text-2xl text-white`}>Through Wonderland</h2>
         </div>
         <span className="rounded-full border border-violet-300/30 bg-violet-400/10 px-3 py-1 text-xs font-semibold text-violet-200">
-          {progress}/2
+          {progress}/{totalCount}
         </span>
       </div>
 
       <div className="relative mx-auto mt-8 h-60 max-w-sm">
         <div className={`${styles.mapPath} absolute bottom-4 left-1/2 top-4 w-px -translate-x-1/2 opacity-70`} aria-hidden="true" />
-        <WhiteRabbitMarker progress={progress} />
+        <WhiteRabbitMarker progress={progress} totalCount={totalCount} />
 
         <div className="absolute left-[4%] top-0 w-[42%] rounded-2xl border border-violet-300/25 bg-violet-400/10 p-3">
           <span className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-violet-200">Start</span>
@@ -149,10 +168,12 @@ function WonderlandMap({ progress }: { progress: number }) {
 function WonderlandHero({
   completedCount,
   progress,
+  totalCount,
   onStart,
 }: {
   completedCount: number;
   progress: number;
+  totalCount: number;
   onStart: () => void;
 }) {
   return (
@@ -187,18 +208,18 @@ function WonderlandHero({
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Прогрес подорожі</p>
-              <p className="mt-1 text-sm text-slate-200">Відкрито локацій: {completedCount} з 2</p>
+              <p className="mt-1 text-sm text-slate-200">Відкрито локацій: {completedCount} з {totalCount}</p>
             </div>
-            <span className={`${styles.displaySerif} text-2xl text-amber-200`}>{Math.round((completedCount / 2) * 100)}%</span>
+            <span className={`${styles.displaySerif} text-2xl text-amber-200`}>{Math.round((completedCount / totalCount) * 100)}%</span>
           </div>
           <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-950/70">
-            <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-cyan-300" style={{ width: `${(completedCount / 2) * 100}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-cyan-300" style={{ width: `${(completedCount / totalCount) * 100}%` }} />
           </div>
         </div>
       </div>
 
       <div className="hidden" aria-hidden="true">
-        <WonderlandMap progress={progress} />
+        <WonderlandMap progress={progress} totalCount={totalCount} />
       </div>
     </header>
   );
@@ -241,9 +262,9 @@ function WordBank({ words, translation, locked, onSelect, onDragStart, onDropWor
             onClick={() => onSelect(word.id)}
             onDragStart={(event) => onDragStart(event, word.id)}
             className={`${styles.control} inline-flex min-h-12 items-center justify-center rounded-xl px-4 py-2 text-base font-bold text-white transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-default disabled:opacity-60 motion-reduce:transition-none`}
-            aria-label={`Додати слово ${normalizeAnswerText(word.text)}`}
+            aria-label={`Додати слово ${word.text}`}
           >
-            {normalizeAnswerText(word.text)}
+            {word.text}
           </button>
         ))}
       </div>
@@ -254,6 +275,7 @@ function WordBank({ words, translation, locked, onSelect, onDragStart, onDropWor
 type AnswerSlotsProps = {
   slots: Array<string | null>;
   wordById: Map<string, WonderlandPhraseTile>;
+  endingPunctuation: WonderlandQuestion["endingPunctuation"];
   locked: boolean;
   status: AnswerStatus;
   onReturn: (slotIndex: number) => void;
@@ -261,7 +283,7 @@ type AnswerSlotsProps = {
   onDragStart: (event: React.DragEvent<HTMLButtonElement>, wordId: string) => void;
 };
 
-function AnswerSlots({ slots, wordById, locked, status, onReturn, onDropWord, onDragStart }: AnswerSlotsProps) {
+function AnswerSlots({ slots, wordById, endingPunctuation, locked, status, onReturn, onDropWord, onDragStart }: AnswerSlotsProps) {
   const statusClasses = status === "correct"
     ? "border-emerald-400/60 bg-emerald-900/50"
     : status === "incorrect"
@@ -311,12 +333,15 @@ function AnswerSlots({ slots, wordById, locked, status, onReturn, onDropWord, on
                 if (droppedId) onDropWord(droppedId, index);
               }}
               className={`${styles.control} inline-flex min-h-12 min-w-[4.25rem] items-center justify-center rounded-xl px-4 py-2 text-base font-bold text-white transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-default disabled:border-emerald-400/55 disabled:bg-emerald-900/60 motion-reduce:transition-none`}
-              aria-label={locked ? normalizeAnswerText(word.text) : `Повернути слово ${normalizeAnswerText(word.text)}`}
+              aria-label={locked ? word.text : `Повернути слово ${word.text}`}
             >
-              {normalizeAnswerText(word.text)}
+              {word.text}
             </button>
           );
         })}
+        <span className="relative -top-[15px] self-end text-2xl font-bold leading-none text-white">
+          {endingPunctuation}
+        </span>
       </div>
     </div>
   );
@@ -344,7 +369,7 @@ function MagicalFactCard({ question, onContinue, continueButtonRef }: MagicalFac
 
   return (
     <aside className={`${styles.panel} mt-7 rounded-3xl border-amber-300/30 p-5 text-slate-200 sm:p-7`}>
-      <h3 className={`${griffy.className} ${styles.wonderlandChapterText} text-2xl`}>{question.curiousFactTitle}</h3>
+      <h3 className={`${mysteryQuest.className} ${styles.wonderlandChapterText} text-2xl`}>{question.curiousFactTitle}</h3>
       <div className="mt-4 space-y-4 text-sm leading-6 sm:text-base sm:leading-7">
         {question.curiousFactText.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         {question.curiousFactExample && (
@@ -383,11 +408,11 @@ function WonderlandChapterHeading({ chapterNumber, title, countLabel }: Wonderla
     <div className="flex min-h-16 items-baseline justify-between gap-5 sm:gap-7">
       <div className="flex min-w-0 items-center gap-3">
         <span className={`${styles.wonderlandChapterBadge} inline-flex size-9 shrink-0 items-center justify-center rounded-full`}>
-          <span className={`${griffy.className} ${styles.wonderlandChapterText} text-[0.9375rem] leading-none`}>
+          <span className={`${mysteryQuest.className} ${styles.wonderlandChapterText} text-[0.9375rem] leading-none`}>
             {String(chapterNumber).padStart(2, "0")}
           </span>
         </span>
-        <h2 className={`${griffy.className} ${styles.wonderlandChapterText} min-w-0 text-xl sm:text-2xl`}>
+        <h2 className={`${mysteryQuest.className} ${styles.wonderlandChapterText} min-w-0 text-xl sm:text-2xl`}>
           {title}
         </h2>
       </div>
@@ -442,10 +467,7 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
         const requiredScrollDistance = buttonBounds.bottom - window.innerHeight + bottomMargin;
         if (requiredScrollDistance <= 0) return;
 
-        window.scrollBy({
-          top: requiredScrollDistance,
-          behavior: prefersReducedMotion() ? "auto" : "smooth",
-        });
+        scrollByWithDuration(requiredScrollDistance, buttonScrollDuration);
       });
     });
 
@@ -466,7 +488,7 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
 
     const selectedPhrases = nextSlots.map((wordId) => normalizeAnswerText(wordById.get(wordId as string)?.text ?? ""));
     const isCorrect = selectedPhrases.every((phrase, index) => phrase === correctPhraseOrder[index])
-      && selectedPhrases.join(" ") === normalizeAnswerText(question.normalizedSentence);
+      && selectedPhrases.join(" ") === question.normalizedSentence;
     if (!isCorrect) {
       setStatus("incorrect");
       return;
@@ -541,8 +563,16 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
           className={`pointer-events-none absolute z-0 ${
             question.decoration.position === "top-right-peek"
               ? "right-0 top-0 w-[27rem] translate-x-[40%] -translate-y-[25%] sm:w-[36rem] md:w-[48rem]"
-              : "left-[-150px] top-[-200px] w-[21.6rem] -translate-x-[20%] -translate-y-[18%] -rotate-[15deg] sm:w-[28.8rem] md:w-[38.4rem]"
+              : "left-0 -top-[100px] w-[21.6rem] -translate-x-[40%] -translate-y-[25%] -rotate-[15deg] sm:w-[28.8rem] md:-top-[180px] md:w-[38.4rem]"
           }`}
+          style={{
+            ...(question.decoration.offsetX
+              ? question.decoration.position === "top-right-peek"
+                ? { right: `${-question.decoration.offsetX}px` }
+                : { left: `${question.decoration.offsetX}px` }
+              : {}),
+            ...(question.decoration.offsetY ? { marginTop: `${question.decoration.offsetY}px` } : {}),
+          }}
           aria-hidden="true"
         >
           <Image
@@ -552,6 +582,17 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
             height={question.decoration.height}
             sizes="(min-width: 768px) 768px, (min-width: 640px) 576px, 432px"
             className="h-auto w-full"
+            style={{
+              ...(question.decoration.scale ? { width: `${question.decoration.scale * 100}%` } : {}),
+              ...(question.decoration.rotation || question.decoration.flipX
+                ? {
+                    transform: [
+                      question.decoration.rotation ? `rotate(${question.decoration.rotation}deg)` : "",
+                      question.decoration.flipX ? "scaleX(-1)" : "",
+                    ].filter(Boolean).join(" "),
+                  }
+                : {}),
+            }}
           />
         </div>
       )}
@@ -579,6 +620,7 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
         <AnswerSlots
           slots={slots}
           wordById={wordById}
+          endingPunctuation={question.endingPunctuation}
           locked={locked}
           status={status}
           onReturn={returnWord}
@@ -618,10 +660,10 @@ function WonderlandCompletion() {
     >
       <div className="text-3xl" aria-hidden="true">🗝 ✨</div>
       <h2 className={`${styles.displaySerif} mt-4 text-3xl text-white sm:text-4xl`}>
-        Вітаємо, ви пройшли весь шлях<br />крізь Країну Див ✨
+        Вітаємо, ви пройшли весь шлях<br />крізь Країну Див
       </h2>
       <p className="mx-auto mt-4 max-w-xl leading-7 text-slate-300">
-        Ви склали обидва речення та відкрили їхні приховані значення.
+        Ви склали всі речення та відкрили їхні приховані значення.
       </p>
     </section>
   );
@@ -645,10 +687,10 @@ export default function AliceWonderlandTest() {
         const element = getElement();
         if (!element) return;
 
-        window.scrollBy({
-          top: element.getBoundingClientRect().top * distanceRatio,
-          behavior: prefersReducedMotion() ? "auto" : "smooth",
-        });
+        scrollByWithDuration(
+          element.getBoundingClientRect().top * distanceRatio,
+          buttonScrollDuration,
+        );
       });
     });
   }
@@ -667,10 +709,10 @@ export default function AliceWonderlandTest() {
     if (!firstCard) return;
 
     const cardTopOffset = 24;
-    window.scrollBy({
-      top: firstCard.getBoundingClientRect().top - cardTopOffset,
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
+    scrollByWithDuration(
+      firstCard.getBoundingClientRect().top - cardTopOffset,
+      buttonScrollDuration,
+    );
   }
 
   function handleContinue(question: WonderlandQuestion) {
@@ -693,6 +735,7 @@ export default function AliceWonderlandTest() {
         <WonderlandHero
           completedCount={completedIds.length}
           progress={rabbitProgress}
+          totalCount={orderedQuestions.length}
           onStart={handleStart}
         />
         <div className="mx-auto max-w-5xl space-y-20 px-4 pb-24 sm:px-8 sm:pb-32 md:space-y-24">
