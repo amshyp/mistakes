@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Mystery_Quest } from "next/font/google";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ContactSection from "@/components/ContactSection";
 import WonderlandHeroTitle from "@/components/WonderlandHeroTitle";
@@ -19,6 +20,7 @@ const mysteryQuest = Mystery_Quest({
 });
 
 type AnswerStatus = "building" | "incorrect" | "correct";
+type PositionFeedbackPhase = "idle" | "visible" | "fading";
 
 const buttonScrollDuration = 600;
 
@@ -41,23 +43,99 @@ const wonderlandStars = [
   { top: "88%", left: "95%", size: "0.75rem", duration: "7.3s", delay: "-5.1s", color: "var(--wl-cyan)" },
   { top: "93%", left: "14%", size: "0.95rem", duration: "5.5s", delay: "-2.7s", color: "var(--wl-gold)", mobileHidden: true },
   { top: "97%", left: "80%", size: "0.65rem", duration: "6.7s", delay: "-1.2s", color: "var(--wl-violet-bright)" },
+  { top: "5%", left: "82%", size: "0.6rem", duration: "6.4s", delay: "-3.3s", color: "var(--wl-cyan)" },
+  { top: "11%", left: "11%", size: "0.85rem", duration: "5.6s", delay: "-0.6s", color: "var(--wl-gold)", mobileHidden: true },
+  { top: "18%", left: "87%", size: "0.55rem", duration: "7.2s", delay: "-4.6s", color: "var(--wl-violet-bright)" },
+  { top: "24%", left: "7%", size: "1rem", duration: "6.0s", delay: "-2.4s", color: "var(--wl-cyan)" },
+  { top: "31%", left: "91%", size: "0.7rem", duration: "4.7s", delay: "-1.1s", color: "var(--wl-gold)", mobileHidden: true },
+  { top: "37%", left: "16%", size: "0.65rem", duration: "7.5s", delay: "-5.0s", color: "var(--wl-violet-bright)" },
+  { top: "43%", left: "81%", size: "0.9rem", duration: "5.4s", delay: "-2.0s", color: "var(--wl-cyan)" },
+  { top: "48%", left: "8%", size: "0.55rem", duration: "6.8s", delay: "-4.0s", color: "var(--wl-gold)", mobileHidden: true },
+  { top: "54%", left: "94%", size: "0.8rem", duration: "5.8s", delay: "-0.5s", color: "var(--wl-violet-bright)" },
+  { top: "60%", left: "11%", size: "1.05rem", duration: "7.0s", delay: "-3.5s", color: "var(--wl-gold)" },
+  { top: "65%", left: "85%", size: "0.6rem", duration: "4.9s", delay: "-2.6s", color: "var(--wl-cyan)", mobileHidden: true },
+  { top: "70%", left: "5%", size: "0.75rem", duration: "6.2s", delay: "-4.8s", color: "var(--wl-violet-bright)" },
+  { top: "76%", left: "97%", size: "0.55rem", duration: "7.6s", delay: "-1.5s", color: "var(--wl-gold)" },
+  { top: "81%", left: "13%", size: "0.9rem", duration: "5.3s", delay: "-3.0s", color: "var(--wl-cyan)", mobileHidden: true },
+  { top: "86%", left: "83%", size: "0.7rem", duration: "6.6s", delay: "-5.2s", color: "var(--wl-violet-bright)" },
+  { top: "90%", left: "6%", size: "0.6rem", duration: "4.5s", delay: "-1.9s", color: "var(--wl-gold)" },
+  { top: "95%", left: "90%", size: "1rem", duration: "7.3s", delay: "-3.9s", color: "var(--wl-cyan)", mobileHidden: true },
+  { top: "99%", left: "18%", size: "0.65rem", duration: "5.7s", delay: "-0.7s", color: "var(--wl-violet-bright)" },
 ] as const;
+
+const desktopStarLayout = {
+  edge: [
+    { top: "4%", left: "3%" }, { top: "13%", left: "96%" }, { top: "22%", left: "5%" },
+    { top: "32%", left: "97%" }, { top: "42%", left: "2%" }, { top: "52%", left: "95%" },
+    { top: "62%", left: "4%" }, { top: "72%", left: "98%" }, { top: "82%", left: "3%" },
+    { top: "91%", left: "96%" }, { top: "98%", left: "6%" },
+  ],
+  inner: [
+    { top: "7%", left: "19%" }, { top: "16%", left: "82%" }, { top: "25%", left: "16%" },
+    { top: "35%", left: "85%" }, { top: "45%", left: "20%" }, { top: "55%", left: "80%" },
+    { top: "65%", left: "17%" }, { top: "75%", left: "83%" }, { top: "85%", left: "21%" },
+    { top: "94%", left: "79%" }, { top: "29%", left: "77%" }, { top: "69%", left: "23%" },
+    { top: "88%", left: "86%" },
+  ],
+  center: [
+    { top: "10%", left: "38%" }, { top: "19%", left: "61%" }, { top: "28%", left: "48%" },
+    { top: "38%", left: "66%" }, { top: "48%", left: "34%" }, { top: "58%", left: "55%" },
+    { top: "68%", left: "42%" }, { top: "78%", left: "63%" }, { top: "89%", left: "37%" },
+    { top: "96%", left: "57%" }, { top: "33%", left: "53%" }, { top: "73%", left: "47%" },
+  ],
+} as const;
+
+const mobileStarLayout = {
+  edge: [
+    { top: "6%", left: "4%" }, { top: "20%", left: "95%" }, { top: "34%", left: "5%" },
+    { top: "49%", left: "96%" }, { top: "64%", left: "4%" }, { top: "79%", left: "95%" },
+    { top: "94%", left: "6%" },
+  ],
+  inner: [
+    { top: "3%", left: "19%" }, { top: "11%", left: "81%" }, { top: "18%", left: "22%" },
+    { top: "26%", left: "78%" }, { top: "33%", left: "17%" }, { top: "41%", left: "83%" },
+    { top: "48%", left: "24%" }, { top: "56%", left: "76%" }, { top: "63%", left: "20%" },
+    { top: "71%", left: "80%" }, { top: "78%", left: "16%" }, { top: "86%", left: "84%" },
+    { top: "92%", left: "23%" }, { top: "98%", left: "77%" },
+  ],
+  center: [
+    { top: "8%", left: "43%" }, { top: "15%", left: "62%" }, { top: "23%", left: "36%" },
+    { top: "30%", left: "57%" }, { top: "38%", left: "46%" }, { top: "45%", left: "66%" },
+    { top: "53%", left: "34%" }, { top: "60%", left: "54%" }, { top: "68%", left: "41%" },
+    { top: "75%", left: "64%" }, { top: "83%", left: "38%" }, { top: "89%", left: "58%" },
+    { top: "95%", left: "47%" }, { top: "43%", left: "52%" }, { top: "73%", left: "50%" },
+  ],
+} as const;
+
+const desktopStarPositions = [
+  ...desktopStarLayout.edge,
+  ...desktopStarLayout.inner,
+  ...desktopStarLayout.center,
+];
+
+const mobileStarPositions = [
+  ...mobileStarLayout.edge,
+  ...mobileStarLayout.inner,
+  ...mobileStarLayout.center,
+];
 
 function WonderlandStars() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden sm:block" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0 z-0 block overflow-hidden" aria-hidden="true">
       {wonderlandStars.map((star, index) => (
         <span
           key={`${star.top}-${star.left}`}
-          className={`${styles.starFieldStar} absolute ${"mobileHidden" in star && star.mobileHidden ? "hidden sm:block" : "block"}`}
+          className={`${styles.starFieldStar} absolute block`}
           style={{
-            top: star.top,
-            left: star.left,
+            "--star-desktop-top": desktopStarPositions[index].top,
+            "--star-desktop-left": desktopStarPositions[index].left,
+            "--star-mobile-top": mobileStarPositions[index].top,
+            "--star-mobile-left": mobileStarPositions[index].left,
             fontSize: star.size,
             animationDuration: star.duration,
             animationDelay: star.delay,
             color: star.color,
-          }}
+          } as CSSProperties}
         >
           {index % 3 === 0 ? "✦" : "⋆"}
         </span>
@@ -108,13 +186,6 @@ function shuffleOrder(ids: string[]) {
 function unsolvedOrder(ids: string[]) {
   if (ids.length < 2) return [...ids];
   return [...ids.slice(1), ids[0]];
-}
-
-function normalizeAnswerText(value: string) {
-  return value
-    .trim()
-    .replace(/\s+/g, " ")
-    .replace(/[.!?]+$/, "");
 }
 
 function WhiteRabbitMarker({ progress, totalCount }: { progress: number; totalCount: number }) {
@@ -274,16 +345,29 @@ function WordBank({ words, translation, locked, onSelect, onDragStart, onDropWor
 
 type AnswerSlotsProps = {
   slots: Array<string | null>;
+  positionFeedback: boolean[] | null;
   wordById: Map<string, WonderlandPhraseTile>;
   endingPunctuation: WonderlandQuestion["endingPunctuation"];
   locked: boolean;
   status: AnswerStatus;
+  positionFeedbackPhase: PositionFeedbackPhase;
   onReturn: (slotIndex: number) => void;
   onDropWord: (wordId: string, slotIndex: number) => void;
   onDragStart: (event: React.DragEvent<HTMLButtonElement>, wordId: string) => void;
 };
 
-function AnswerSlots({ slots, wordById, endingPunctuation, locked, status, onReturn, onDropWord, onDragStart }: AnswerSlotsProps) {
+function AnswerSlots({
+  slots,
+  positionFeedback,
+  wordById,
+  endingPunctuation,
+  locked,
+  status,
+  positionFeedbackPhase,
+  onReturn,
+  onDropWord,
+  onDragStart,
+}: AnswerSlotsProps) {
   const statusClasses = status === "correct"
     ? "border-emerald-400/60 bg-emerald-900/50"
     : status === "incorrect"
@@ -301,6 +385,14 @@ function AnswerSlots({ slots, wordById, endingPunctuation, locked, status, onRet
       <div className="flex flex-wrap gap-2.5">
         {slots.map((wordId, index) => {
           const word = wordId ? wordById.get(wordId) : undefined;
+          const positionFeedbackClasses = positionFeedbackPhase === "visible" && positionFeedback
+            ? positionFeedback[index]
+              ? styles.positionCorrect
+              : styles.positionIncorrect
+            : "";
+          const positionFeedbackTransitionClass = positionFeedbackPhase !== "idle"
+            ? styles.positionFeedbackTransition
+            : "";
 
           if (!word) {
             return (
@@ -332,7 +424,7 @@ function AnswerSlots({ slots, wordById, endingPunctuation, locked, status, onRet
                 const droppedId = event.dataTransfer.getData("text/wonderland-word");
                 if (droppedId) onDropWord(droppedId, index);
               }}
-              className={`${styles.control} inline-flex min-h-12 min-w-[4.25rem] items-center justify-center rounded-xl px-4 py-2 text-base font-bold text-white transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-default disabled:border-emerald-400/55 disabled:bg-emerald-900/60 motion-reduce:transition-none`}
+              className={`${styles.control} ${positionFeedbackTransitionClass} ${positionFeedbackClasses} inline-flex min-h-12 min-w-[4.25rem] items-center justify-center rounded-xl px-4 py-2 text-base font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300 disabled:cursor-default`}
               aria-label={locked ? word.text : `Повернути слово ${word.text}`}
             >
               {word.text}
@@ -428,18 +520,23 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
   const [availableIds, setAvailableIds] = useState(() => unsolvedOrder(phraseIds));
   const [slots, setSlots] = useState<Array<string | null>>(() => Array(question.phraseTiles.length).fill(null));
   const [status, setStatus] = useState<AnswerStatus>("building");
+  const [positionFeedbackPhase, setPositionFeedbackPhase] = useState<PositionFeedbackPhase>("idle");
+  const [positionFeedback, setPositionFeedback] = useState<boolean[] | null>(null);
   const [locked, setLocked] = useState(false);
   const [showFact, setShowFact] = useState(false);
+  const [decorationLoaded, setDecorationLoaded] = useState(false);
   const revealTimer = useRef<number | null>(null);
+  const feedbackHoldTimer = useRef<number | null>(null);
+  const feedbackClearTimer = useRef<number | null>(null);
+  const feedbackSequence = useRef(0);
+  const pendingCompleteEvaluation = useRef(false);
   const continueButtonRef = useRef<HTMLButtonElement>(null);
   const wordById = useMemo(() => new Map(question.phraseTiles.map((tile) => [tile.id, tile])), [question.phraseTiles]);
-  const correctPhraseOrder = useMemo(
-    () => question.phraseTiles.map((tile) => normalizeAnswerText(tile.text)),
-    [question.phraseTiles],
-  );
-
   useEffect(() => () => {
+    feedbackSequence.current += 1;
     if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
+    if (feedbackHoldTimer.current !== null) window.clearTimeout(feedbackHoldTimer.current);
+    if (feedbackClearTimer.current !== null) window.clearTimeout(feedbackClearTimer.current);
   }, []);
 
   useEffect(() => {
@@ -477,27 +574,116 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
     };
   }, [showFact, status]);
 
+  function cancelTemporaryFeedback() {
+    feedbackSequence.current += 1;
+    pendingCompleteEvaluation.current = false;
+    if (feedbackHoldTimer.current !== null) {
+      window.clearTimeout(feedbackHoldTimer.current);
+      feedbackHoldTimer.current = null;
+    }
+    if (feedbackClearTimer.current !== null) {
+      window.clearTimeout(feedbackClearTimer.current);
+      feedbackClearTimer.current = null;
+    }
+    setPositionFeedbackPhase("idle");
+    setPositionFeedback(null);
+  }
+
+  useEffect(() => {
+    if (!pendingCompleteEvaluation.current) return;
+    pendingCompleteEvaluation.current = false;
+    if (slots.some((slot) => slot === null)) return;
+
+    const evaluationFrame = window.requestAnimationFrame(() => {
+      const completeFeedback = slots.map((wordId, index) => wordId === phraseIds[index]);
+
+      if (completeFeedback.every(Boolean)) {
+        cancelTemporaryFeedback();
+        setStatus("correct");
+        setLocked(true);
+        onCorrect(question.id);
+        revealTimer.current = window.setTimeout(() => setShowFact(true), prefersReducedMotion() ? 0 : 550);
+        return;
+      }
+
+      feedbackSequence.current += 1;
+      setPositionFeedback(completeFeedback);
+      setStatus("incorrect");
+      setPositionFeedbackPhase("visible");
+    });
+
+    return () => window.cancelAnimationFrame(evaluationFrame);
+  }, [onCorrect, phraseIds, question.id, slots]);
+
+  useEffect(() => {
+    if (positionFeedbackPhase !== "visible") return;
+    const sequence = feedbackSequence.current;
+
+    feedbackHoldTimer.current = window.setTimeout(() => {
+      if (feedbackSequence.current !== sequence) return;
+      setPositionFeedbackPhase("fading");
+      feedbackHoldTimer.current = null;
+    }, 1000);
+
+    return () => {
+      if (feedbackHoldTimer.current !== null) {
+        window.clearTimeout(feedbackHoldTimer.current);
+        feedbackHoldTimer.current = null;
+      }
+    };
+  }, [positionFeedbackPhase]);
+
+  useEffect(() => {
+    if (positionFeedbackPhase !== "fading") return;
+    const sequence = feedbackSequence.current;
+    const fadeDuration = prefersReducedMotion() ? 0 : 2000;
+
+    feedbackClearTimer.current = window.setTimeout(() => {
+      if (feedbackSequence.current !== sequence) return;
+      setPositionFeedbackPhase("idle");
+      setPositionFeedback(null);
+      setStatus("building");
+      feedbackClearTimer.current = null;
+    }, fadeDuration);
+
+    return () => {
+      if (feedbackClearTimer.current !== null) {
+        window.clearTimeout(feedbackClearTimer.current);
+        feedbackClearTimer.current = null;
+      }
+    };
+  }, [positionFeedbackPhase]);
+
   function applyAnswer(nextSlots: Array<string | null>, nextAvailableIds: string[]) {
+    const isComplete = nextSlots.every((slot) => slot !== null);
+    const orderChanged = nextSlots.some((wordId, index) => wordId !== slots[index]);
+
     setSlots(nextSlots);
     setAvailableIds(nextAvailableIds);
 
-    if (nextSlots.some((slot) => slot === null)) {
+    if (!isComplete) {
+      cancelTemporaryFeedback();
       setStatus("building");
       return;
     }
 
-    const selectedPhrases = nextSlots.map((wordId) => normalizeAnswerText(wordById.get(wordId as string)?.text ?? ""));
-    const isCorrect = selectedPhrases.every((phrase, index) => phrase === correctPhraseOrder[index])
-      && selectedPhrases.join(" ") === question.normalizedSentence;
-    if (!isCorrect) {
-      setStatus("incorrect");
+    if (!orderChanged) {
       return;
     }
 
-    setStatus("correct");
-    setLocked(true);
-    onCorrect(question.id);
-    revealTimer.current = window.setTimeout(() => setShowFact(true), prefersReducedMotion() ? 0 : 550);
+    const isCorrect = nextSlots.every((wordId, index) => wordId === phraseIds[index]);
+    if (isCorrect) {
+      cancelTemporaryFeedback();
+      setStatus("correct");
+      setLocked(true);
+      onCorrect(question.id);
+      revealTimer.current = window.setTimeout(() => setShowFact(true), prefersReducedMotion() ? 0 : 550);
+      return;
+    }
+
+    cancelTemporaryFeedback();
+    pendingCompleteEvaluation.current = true;
+    setStatus("building");
   }
 
   function placeWord(wordId: string) {
@@ -560,38 +746,38 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
     <div className="relative overflow-visible">
       {question.decoration && (
         <div
-          className={`pointer-events-none absolute z-0 ${
-            question.decoration.position === "top-right-peek"
-              ? "right-0 top-0 w-[27rem] translate-x-[40%] -translate-y-[25%] sm:w-[36rem] md:w-[48rem]"
-              : "left-0 -top-[100px] w-[21.6rem] -translate-x-[40%] -translate-y-[25%] -rotate-[15deg] sm:w-[28.8rem] md:-top-[180px] md:w-[38.4rem]"
+          className={`${styles.decoration} pointer-events-none absolute top-0 ${
+            question.decoration.side === "right"
+              ? "right-0"
+              : "left-0"
           }`}
+          data-side={question.decoration.side}
           style={{
-            ...(question.decoration.offsetX
-              ? question.decoration.position === "top-right-peek"
-                ? { right: `${-question.decoration.offsetX}px` }
-                : { left: `${question.decoration.offsetX}px` }
-              : {}),
-            ...(question.decoration.offsetY ? { marginTop: `${question.decoration.offsetY}px` } : {}),
-          }}
+            "--decoration-desktop-width": `${question.decoration.desktop.width}px`,
+            "--decoration-desktop-x": `${question.decoration.desktop.x}px`,
+            "--decoration-desktop-y": `${question.decoration.desktop.y}px`,
+            "--decoration-mobile-width": `${question.decoration.mobile.width}px`,
+            "--decoration-mobile-x": `${question.decoration.mobile.x}px`,
+            "--decoration-mobile-y": `${question.decoration.mobile.y}px`,
+            opacity: question.decoration.opacity,
+            zIndex: question.decoration.zIndex ?? 0,
+          } as CSSProperties}
           aria-hidden="true"
         >
           <Image
+            key={question.id}
             src={question.decoration.src}
             alt=""
-            width={question.decoration.width}
-            height={question.decoration.height}
-            sizes="(min-width: 768px) 768px, (min-width: 640px) 576px, 432px"
-            className="h-auto w-full"
+            width={question.decoration.desktop.width}
+            height={question.decoration.desktop.width}
+            sizes={`(min-width: 768px) ${question.decoration.desktop.width}px, ${question.decoration.mobile.width}px`}
+            className={`${styles.decorationImage} ${decorationLoaded ? styles.decorationImageLoaded : ""} h-auto w-full`}
+            onLoad={() => setDecorationLoaded(true)}
             style={{
-              ...(question.decoration.scale ? { width: `${question.decoration.scale * 100}%` } : {}),
-              ...(question.decoration.rotation || question.decoration.flipX
-                ? {
-                    transform: [
-                      question.decoration.rotation ? `rotate(${question.decoration.rotation}deg)` : "",
-                      question.decoration.flipX ? "scaleX(-1)" : "",
-                    ].filter(Boolean).join(" "),
-                  }
-                : {}),
+              transform: [
+                `rotate(${question.decoration.side === "left" ? -15 : 15}deg)`,
+                question.decoration.flipX ? "scaleX(-1)" : "",
+              ].filter(Boolean).join(" "),
             }}
           />
         </div>
@@ -619,16 +805,18 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
         />
         <AnswerSlots
           slots={slots}
+          positionFeedback={positionFeedback}
           wordById={wordById}
           endingPunctuation={question.endingPunctuation}
           locked={locked}
           status={status}
+          positionFeedbackPhase={positionFeedbackPhase}
           onReturn={returnWord}
           onDropWord={dropWordOnSlot}
           onDragStart={startDragging}
         />
 
-        <div className="mt-4 min-h-7" aria-live="polite" aria-atomic="true">
+        <div className="mt-4 flex min-h-7 flex-wrap items-center justify-between gap-3" aria-live="polite" aria-atomic="true">
           {feedback && (
             <p className={`text-sm font-semibold ${status === "correct" ? "text-emerald-300" : "text-rose-300"}`}>
               {feedback}
@@ -678,8 +866,48 @@ export default function AliceWonderlandTest() {
   const [completedIds, setCompletedIds] = useState<string[]>([]);
   const [rabbitProgress, setRabbitProgress] = useState(0);
   const [journeyComplete, setJourneyComplete] = useState(false);
+  const [quizAttempt, setQuizAttempt] = useState(0);
+  const [isRestarting, setIsRestarting] = useState(false);
   const cardRefs = useRef(new Map<number, HTMLDivElement>());
   const completionRef = useRef<HTMLDivElement>(null);
+  const quizStartRef = useRef<HTMLDivElement>(null);
+  const restartFinalizeTimer = useRef<number | null>(null);
+  const restartScrollPending = useRef(false);
+  const visibleQuestions = isRestarting
+    ? orderedQuestions
+    : orderedQuestions.filter((question) => question.unlockOrder <= unlockedOrder);
+
+  useEffect(() => {
+    if (!restartScrollPending.current) return;
+    restartScrollPending.current = false;
+
+    const firstFrame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const quizStart = quizStartRef.current;
+        if (!quizStart) return;
+
+        const stickyHeaderOffset = 24;
+        scrollByWithDuration(
+          quizStart.getBoundingClientRect().top - stickyHeaderOffset,
+          buttonScrollDuration,
+        );
+
+        const resetDelay = prefersReducedMotion() ? 0 : buttonScrollDuration;
+        restartFinalizeTimer.current = window.setTimeout(() => {
+          setIsRestarting(false);
+          restartFinalizeTimer.current = null;
+        }, resetDelay);
+      });
+    });
+
+    return () => window.cancelAnimationFrame(firstFrame);
+  }, [quizAttempt]);
+
+  useEffect(() => () => {
+    if (restartFinalizeTimer.current !== null) {
+      window.clearTimeout(restartFinalizeTimer.current);
+    }
+  }, []);
 
   function scrollTo(getElement: () => HTMLDivElement | null | undefined, distanceRatio = 1) {
     window.requestAnimationFrame(() => {
@@ -728,6 +956,22 @@ export default function AliceWonderlandTest() {
     scrollTo(() => completionRef.current);
   }
 
+  function handleRestart() {
+    if (restartFinalizeTimer.current !== null) {
+      window.clearTimeout(restartFinalizeTimer.current);
+      restartFinalizeTimer.current = null;
+    }
+
+    const firstQuestionOrder = orderedQuestions[0]?.unlockOrder ?? 1;
+    restartScrollPending.current = true;
+    setIsRestarting(true);
+    setUnlockedOrder(firstQuestionOrder);
+    setCompletedIds([]);
+    setRabbitProgress(0);
+    setJourneyComplete(false);
+    setQuizAttempt((attempt) => attempt + 1);
+  }
+
   return (
     <main className={`${styles.wonderlandPage} relative overflow-x-hidden`}>
       <WonderlandStars />
@@ -738,8 +982,12 @@ export default function AliceWonderlandTest() {
           totalCount={orderedQuestions.length}
           onStart={handleStart}
         />
-        <div className="mx-auto max-w-5xl space-y-20 px-4 pb-24 sm:px-8 sm:pb-32 md:space-y-24">
-          {orderedQuestions.filter((question) => question.unlockOrder <= unlockedOrder).map((question) => (
+        <div
+          key={quizAttempt}
+          ref={quizStartRef}
+          className="mx-auto max-w-5xl scroll-mt-24 space-y-20 px-4 pb-24 sm:px-8 sm:pb-32 md:space-y-24"
+        >
+          {visibleQuestions.map((question) => (
             <div
               key={question.id}
               ref={(element) => {
@@ -755,13 +1003,14 @@ export default function AliceWonderlandTest() {
             </div>
           ))}
 
-          {journeyComplete && (
+          {(journeyComplete || isRestarting) && (
             <div ref={completionRef} className="scroll-mt-8">
               <WonderlandCompletion />
               <ContactSection
                 currentQuizScore={completedIds.length}
                 totalQuestions={orderedQuestions.length}
                 theme="wonderland"
+                onRestart={handleRestart}
               />
             </div>
           )}

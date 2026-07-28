@@ -3,6 +3,15 @@ export type WonderlandPhraseTile = {
   text: string;
 };
 
+export const DECORATION_DESKTOP_BASELINE_WIDTH = 420;
+export const DECORATION_MOBILE_BASELINE_WIDTH = 252;
+
+type DecorationPlacement = {
+  width: number;
+  x: number;
+  y: number;
+};
+
 export type WonderlandQuestion = {
   id: string;
   number: number;
@@ -21,14 +30,12 @@ export type WonderlandQuestion = {
   };
   decoration?: {
     src: string;
-    width: number;
-    height: number;
-    position: "top-right-peek" | "top-left-peek";
-    scale?: number;
-    offsetX?: number;
-    offsetY?: number;
-    rotation?: number;
+    side: "left" | "right";
+    desktop: DecorationPlacement;
+    mobile: DecorationPlacement;
     flipX?: boolean;
+    opacity?: number;
+    zIndex?: number;
   };
   unlockOrder: number;
 };
@@ -54,13 +61,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Вислів mad as a hatter існував ще до появи «Аліси». У XIX столітті капелюшники працювали з ртуттю, пари якої могли викликати тремтіння, зміни настрою й психічні розлади. Саме тому з'явився цей вислів, а Божевільний Капелюшник лише зробив його знаменитим. Він і сьогодні означає \"абсолютно божевільний\".",
     ],
     decoration: {
-      src: "/images/hatter.png",
-      width: 928,
-      height: 1152,
-      position: "top-left-peek",
-      scale: 0.575,
-      offsetX: 250,
-      offsetY: -30,
+      src: "/images/1hatter.png",
+      side: "right",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: 150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: 150, y: -200 },
     },
     unlockOrder: 1,
   },
@@ -88,10 +92,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       ukrainian: "Навіть трохи доброти може багато змінити.",
     },
     decoration: {
-      src: "/images/cookie.png",
-      width: 2048,
-      height: 1536,
-      position: "top-right-peek",
+      src: "/images/1cookie.png",
+      side: "left",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: -150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: -150, y: -200 },
     },
     unlockOrder: 2,
   },
@@ -115,11 +119,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Слова muchness раніше майже не існувало — його використали як вигаданий іменник від much. В «Алісі в Країні чудес» воно означає твою індивідуальність, внутрішній вогонь або справжню сутність.",
     ],
     decoration: {
-      src: "/images/flamingo.png",
-      width: 464,
-      height: 576,
-      position: "top-left-peek",
-      scale: 0.8,
+      src: "/images/1flamingo.png",
+      side: "right",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: 150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: 150, y: -200 },
     },
     unlockOrder: 3,
   },
@@ -143,12 +146,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "У Країні Див усе відбувається навпаки: спочатку карають, а вже потім вирішують, чи людина взагалі винна.",
     ],
     decoration: {
-      src: "/images/queen.png",
-      width: 2048,
-      height: 2048,
-      position: "top-left-peek",
-      scale: 0.85,
-      offsetY: 100,
+      src: "/images/1queen.png",
+      side: "left",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: -150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: -150, y: -200 },
     },
     unlockOrder: 4,
   },
@@ -172,12 +173,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Саме ця сцена дала життя вислову down the rabbit hole. Сьогодні його використовують, коли людина настільки захоплюється якоюсь темою, що починає без кінця переходити від одного факту до іншого — ніби потрапляє в нескінченний лабіринт інформації.",
     ],
     decoration: {
-      src: "/images/rabbit.png",
-      width: 896,
-      height: 1200,
-      position: "top-right-peek",
-      scale: 0.6,
-      offsetX: 210,
+      src: "/images/1rabbit.png",
+      side: "right",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: 150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: 150, y: -200 },
     },
     unlockOrder: 5,
   },
@@ -201,13 +200,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "У звичайній англійській так говорити неправильно — правильно more and more curious. Але Льюїс Керролл навмисно порушив граматичне правило, щоб передати щире здивування Аліси й зробити її мову більш дитячою та кумедною.",
     ],
     decoration: {
-      src: "/images/alice.png",
-      width: 448,
-      height: 592,
-      position: "top-left-peek",
-      scale: 0.63,
-      offsetX: 80,
-      offsetY: 50,
+      src: "/images/1alice.png",
+      side: "left",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: -150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: -150, y: -200 },
     },
     unlockOrder: 6,
   },
@@ -231,14 +227,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Цей вислів означає \"це не по темі\" або \"це не має значення в цьому контексті\". Він з'явився ще в XVI столітті й буквально означав: це ні тут, ні там, тобто не належить до предмета розмови.",
     ],
     decoration: {
-      src: "/images/tea.png",
-      width: 576,
-      height: 464,
-      position: "top-right-peek",
-      scale: 0.5,
-      offsetX: 250,
-      offsetY: -50,
-      rotation: 10,
+      src: "/images/1tea.png",
+      side: "right",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: 150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: 150, y: -200 },
     },
     unlockOrder: 7,
   },
@@ -262,13 +254,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Це найвідоміша загадка з «Аліси в Країні чудес». Найцікавіше те, що Льюїс Керролл спочатку не придумав відповіді. Він навмисно залишив загадку без розв'язку, щоб показати абсурдність світу Країни чудес.",
     ],
     decoration: {
-      src: "/images/raven.png",
-      width: 464,
-      height: 576,
-      position: "top-left-peek",
-      scale: 0.7,
-      offsetX: 60,
-      offsetY: 150,
+      src: "/images/1raven.png",
+      side: "left",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: -150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: -150, y: -200 },
       flipX: true,
     },
     unlockOrder: 8,
@@ -293,12 +282,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Це репліка з фільму Alice Through the Looking Glass (2016). У ньому Час — не абстрактне поняття, а справжній персонаж. Саме тому герої кажуть he, а не it. Це гарний приклад персоніфікації в англійській мові.",
     ],
     decoration: {
-      src: "/images/watch.png",
-      width: 464,
-      height: 576,
-      position: "top-right-peek",
-      scale: 0.51,
-      offsetX: 240,
+      src: "/images/1watch.png",
+      side: "right",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: 150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: 150, y: -200 },
     },
     unlockOrder: 9,
   },
@@ -324,10 +311,10 @@ export const wonderlandQuestions: WonderlandQuestion[] = [
       "Not all there не означає, що людини буквально «немає тут». За змістом цей вислів дуже схожий на українське «не всі вдома». Обидва означають, що людина поводиться дивно або «трохи не в собі».",
     ],
     decoration: {
-      src: "/images/cat.png",
-      width: 1242,
-      height: 848,
-      position: "top-left-peek",
+      src: "/images/1cat.png",
+      side: "left",
+      desktop: { width: DECORATION_DESKTOP_BASELINE_WIDTH, x: -150, y: -200 },
+      mobile: { width: DECORATION_MOBILE_BASELINE_WIDTH, x: -150, y: -200 },
     },
     unlockOrder: 10,
   },

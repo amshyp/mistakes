@@ -65,12 +65,21 @@
 }
 
 .starFieldStar {
+  top: var(--star-mobile-top);
+  left: var(--star-mobile-left);
   opacity: 0.45;
   line-height: 1;
   text-shadow: 0 0 7px currentColor;
   animation-name: wonderland-star-twinkle-float;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+}
+
+@media (min-width: 768px) {
+  .starFieldStar {
+    top: var(--star-desktop-top);
+    left: var(--star-desktop-left);
+  }
 }
 
 @keyframes wonderland-star-twinkle-float {
@@ -128,6 +137,63 @@
     0 24px 60px rgb(0 0 0 / 0.28);
 }
 
+.decoration {
+  --decoration-mobile-center-x: 0px;
+  width: var(--decoration-mobile-width);
+  transform: translate3d(
+    calc(var(--decoration-mobile-x) + var(--decoration-mobile-center-x)),
+    calc(var(--decoration-mobile-y) + 90px),
+    0
+  );
+}
+
+.decoration[data-side="left"] {
+  --decoration-mobile-center-x: 90px;
+}
+
+.decoration[data-side="right"] {
+  --decoration-mobile-center-x: -90px;
+}
+
+@media (min-width: 768px) {
+  .decoration {
+    width: var(--decoration-desktop-width);
+    transform: translate3d(
+      var(--decoration-desktop-x),
+      var(--decoration-desktop-y),
+      0
+    );
+  }
+}
+
+@keyframes decoration-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.decorationImage {
+  opacity: 0;
+}
+
+.decorationImageLoaded {
+  animation: decoration-fade-in 2000ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decorationImage {
+    opacity: 1;
+  }
+
+  .decorationImageLoaded {
+    animation: none;
+  }
+}
+
 .panelSoft {
   background: var(--wl-panel-soft);
   border: 1px solid var(--wl-border);
@@ -144,6 +210,32 @@
 
 .control:hover {
   background: var(--wl-control-hover);
+}
+
+.positionCorrect,
+.positionCorrect:hover {
+  background: rgb(6 78 59 / 0.6);
+  border-color: rgb(52 211 153 / 0.7);
+}
+
+.positionIncorrect,
+.positionIncorrect:hover {
+  background: rgb(136 19 55 / 0.6);
+  border-color: rgb(251 113 133 / 0.7);
+}
+
+.positionFeedbackTransition {
+  transition:
+    background-color 2s ease,
+    border-color 2s ease,
+    color 2s ease,
+    box-shadow 2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .positionFeedbackTransition {
+    transition-duration: 0s;
+  }
 }
 
 .mapPath {
