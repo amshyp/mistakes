@@ -184,6 +184,11 @@
   animation: decoration-fade-in 2000ms ease-out both;
 }
 
+.decorationImageImmediate {
+  opacity: 1;
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .decorationImage {
     opacity: 1;

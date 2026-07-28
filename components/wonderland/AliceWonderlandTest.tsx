@@ -516,6 +516,7 @@ function WonderlandChapterHeading({ chapterNumber, title, countLabel }: Wonderla
 }
 
 function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandSentenceCardProps) {
+  const isFirstCard = question.unlockOrder === 1;
   const phraseIds = useMemo(() => question.phraseTiles.map((tile) => tile.id), [question.phraseTiles]);
   const [availableIds, setAvailableIds] = useState(() => unsolvedOrder(phraseIds));
   const [slots, setSlots] = useState<Array<string | null>>(() => Array(question.phraseTiles.length).fill(null));
@@ -771,7 +772,13 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
             width={question.decoration.desktop.width}
             height={question.decoration.desktop.width}
             sizes={`(min-width: 768px) ${question.decoration.desktop.width}px, ${question.decoration.mobile.width}px`}
-            className={`${styles.decorationImage} ${decorationLoaded ? styles.decorationImageLoaded : ""} h-auto w-full`}
+            className={`${styles.decorationImage} ${
+              isFirstCard
+                ? styles.decorationImageImmediate
+                : decorationLoaded
+                  ? styles.decorationImageLoaded
+                  : ""
+            } h-auto w-full`}
             onLoad={() => setDecorationLoaded(true)}
             style={{
               transform: [
