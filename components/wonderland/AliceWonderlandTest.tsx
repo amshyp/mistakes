@@ -525,7 +525,6 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
   const [positionFeedback, setPositionFeedback] = useState<boolean[] | null>(null);
   const [locked, setLocked] = useState(false);
   const [showFact, setShowFact] = useState(false);
-  const [decorationLoaded, setDecorationLoaded] = useState(false);
   const revealTimer = useRef<number | null>(null);
   const feedbackHoldTimer = useRef<number | null>(null);
   const feedbackClearTimer = useRef<number | null>(null);
@@ -775,11 +774,8 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
             className={`${styles.decorationImage} ${
               isFirstCard
                 ? styles.decorationImageImmediate
-                : decorationLoaded
-                  ? styles.decorationImageLoaded
-                  : ""
+                : styles.decorationImageActive
             } h-auto w-full`}
-            onLoad={() => setDecorationLoaded(true)}
             style={{
               transform: [
                 `rotate(${question.decoration.side === "left" ? -15 : 15}deg)`,

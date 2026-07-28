@@ -180,7 +180,7 @@
   opacity: 0;
 }
 
-.decorationImageLoaded {
+.decorationImageActive {
   animation: decoration-fade-in 2000ms ease-out both;
 }
 
@@ -194,7 +194,7 @@
     opacity: 1;
   }
 
-  .decorationImageLoaded {
+  .decorationImageActive {
     animation: none;
   }
 }
