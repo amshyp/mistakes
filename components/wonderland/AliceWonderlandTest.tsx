@@ -24,6 +24,52 @@ type PositionFeedbackPhase = "idle" | "visible" | "fading";
 
 const buttonScrollDuration = 600;
 
+const decorationPreloads = new Map<string, Promise<void>>();
+
+function loadAndDecodeDecoration(src: string) {
+  const existingPreload = decorationPreloads.get(src);
+  if (existingPreload) return existingPreload;
+
+  const preload = new Promise<void>((resolve) => {
+    const image = new window.Image();
+
+    const finish = () => {
+      image.onload = null;
+      image.onerror = null;
+      resolve();
+    };
+
+    image.onload = () => {
+      if (typeof image.decode !== "function") {
+        finish();
+        return;
+      }
+
+      void image.decode().catch(() => undefined).then(finish);
+    };
+    image.onerror = finish;
+    image.src = src;
+
+    if (image.complete) {
+      image.onload = null;
+      image.onerror = null;
+      if (image.naturalWidth > 0 && typeof image.decode === "function") {
+        void image.decode().catch(() => undefined).then(resolve);
+      } else {
+        resolve();
+      }
+    }
+  });
+
+  decorationPreloads.set(src, preload);
+  return preload;
+}
+
+function decodeRenderedDecoration(image: HTMLImageElement) {
+  if (typeof image.decode !== "function") return Promise.resolve();
+  return image.decode().catch(() => undefined);
+}
+
 const wonderlandStars = [
   { top: "3%", left: "6%", size: "0.7rem", duration: "5.2s", delay: "-1.4s", color: "var(--wl-gold)" },
   { top: "8%", left: "89%", size: "0.95rem", duration: "7.4s", delay: "-4.1s", color: "var(--wl-violet-bright)", mobileHidden: true },
@@ -525,12 +571,14 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
   const [positionFeedback, setPositionFeedback] = useState<boolean[] | null>(null);
   const [locked, setLocked] = useState(false);
   const [showFact, setShowFact] = useState(false);
+  const [isDecorationReady, setIsDecorationReady] = useState(isFirstCard);
   const revealTimer = useRef<number | null>(null);
   const feedbackHoldTimer = useRef<number | null>(null);
   const feedbackClearTimer = useRef<number | null>(null);
   const feedbackSequence = useRef(0);
   const pendingCompleteEvaluation = useRef(false);
   const continueButtonRef = useRef<HTMLButtonElement>(null);
+  const decorationImageRef = useRef<HTMLImageElement>(null);
   const wordById = useMemo(() => new Map(question.phraseTiles.map((tile) => [tile.id, tile])), [question.phraseTiles]);
   useEffect(() => () => {
     feedbackSequence.current += 1;
@@ -546,6 +594,41 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
 
     return () => window.clearTimeout(shuffleTimer);
   }, [phraseIds]);
+
+  useEffect(() => {
+    if (isFirstCard || !question.decoration) return;
+
+    const image = decorationImageRef.current;
+    if (!image) return;
+
+    let isCurrent = true;
+
+    const markReady = async () => {
+      await decodeRenderedDecoration(image);
+      if (isCurrent) setIsDecorationReady(true);
+    };
+
+    const handleLoad = () => {
+      void markReady();
+    };
+    const handleError = () => {
+      if (isCurrent) setIsDecorationReady(true);
+    };
+
+    if (image.complete) {
+      if (image.naturalWidth > 0) void markReady();
+      else handleError();
+    } else {
+      image.addEventListener("load", handleLoad, { once: true });
+      image.addEventListener("error", handleError, { once: true });
+    }
+
+    return () => {
+      isCurrent = false;
+      image.removeEventListener("load", handleLoad);
+      image.removeEventListener("error", handleError);
+    };
+  }, [isFirstCard, question.decoration, question.id]);
 
   useEffect(() => {
     if (status !== "correct" || !showFact) return;
@@ -766,15 +849,20 @@ function WonderlandSentenceCard({ question, onCorrect, onContinue }: WonderlandS
         >
           <Image
             key={question.id}
+            ref={decorationImageRef}
             src={question.decoration.src}
             alt=""
             width={question.decoration.desktop.width}
             height={question.decoration.desktop.width}
             sizes={`(min-width: 768px) ${question.decoration.desktop.width}px, ${question.decoration.mobile.width}px`}
+            loading="eager"
+            unoptimized
             className={`${styles.decorationImage} ${
               isFirstCard
                 ? styles.decorationImageImmediate
-                : styles.decorationImageActive
+                : isDecorationReady
+                  ? styles.decorationImageActive
+                  : ""
             } h-auto w-full`}
             style={{
               transform: [
@@ -911,6 +999,16 @@ export default function AliceWonderlandTest() {
       window.clearTimeout(restartFinalizeTimer.current);
     }
   }, []);
+
+  useEffect(() => {
+    const decorationSources = orderedQuestions
+      .map((question) => question.decoration?.src)
+      .filter((src): src is string => Boolean(src));
+
+    decorationSources.forEach((src) => {
+      void loadAndDecodeDecoration(src);
+    });
+  }, [orderedQuestions]);
 
   function scrollTo(getElement: () => HTMLDivElement | null | undefined, distanceRatio = 1) {
     window.requestAnimationFrame(() => {
