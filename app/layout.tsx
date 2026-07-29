@@ -13,8 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "10 типових помилок в англійській | Безкоштовний тест",
-  description: "Пройдіть короткий інтерактивний тест з англійської та дізнайтеся свій результат.",
+  title: "greenorange.online",
+  description: "Інтерактивні тести та курси з Англійської.",
+  openGraph: {
+    siteName: "greenorange.online",
+    title: "greenorange.online",
+    description: "Інтерактивні тести та курси з Англійської.",
+    images: ["/og-main.png"],
+  },
+  twitter: {
+    title: "greenorange.online",
+    description: "Інтерактивні тести та курси з Англійської.",
+    images: ["/og-main.png"],
+  },
 };
 
 export default function RootLayout({
