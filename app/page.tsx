@@ -53,7 +53,7 @@ export default function Home() {
 
             <Link
               href="/tests/alice-in-wonderland"
-              aria-label="Англійська з Алісою в Країні Див — Почати пригоду"
+              aria-label="Англійська з Алісою в Країні Чудес — Почати пригоду"
               className="group relative flex min-w-0 flex-col overflow-hidden rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg shadow-violet-950/5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-950/10 sm:p-7"
             >
               <span className="pointer-events-none absolute right-7 top-6 animate-pulse text-lg text-violet-400/55 motion-reduce:animate-none" aria-hidden="true">✦</span>
@@ -64,10 +64,10 @@ export default function Home() {
                 ПРИГОДА
               </span>
               <h3 className="relative z-10 mt-5 text-2xl font-black leading-tight tracking-tight text-slate-950">
-                Англійська з Алісою в Країні Див
+                Англійська з Алісою в Країні Чудес
               </h3>
               <p className="relative z-10 mt-4 flex-1 leading-7 text-slate-600">
-                Складайте англійські речення з відомих цитат, відкривайте цікаві факти та подорожуйте Країною Див разом з Алісою.
+                Складайте англійські речення з відомих цитат, відкривайте цікаві факти та подорожуйте Країною Чудес разом з Алісою.
               </p>
               <span className="relative z-10 mt-7 inline-flex w-fit items-center rounded-2xl bg-violet-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-violet-500/20 transition group-hover:bg-violet-700">
                 Почати пригоду

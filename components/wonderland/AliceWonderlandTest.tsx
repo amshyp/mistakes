@@ -310,7 +310,7 @@ function WonderlandHero({
           />
         </div>
         <p className="mx-auto mt-10 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          Складайте англійські речення, відкривайте їхні приховані значення та рухайтеся далі Країною див.
+          Складайте англійські речення, відкривайте їхні приховані значення та рухайтеся далі Країною Чудес.
         </p>
         <p className="mt-5 text-sm font-medium text-cyan-100">Розташуйте слова у правильному порядку.</p>
         <button
