@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://greenorange.online"),
   title: "greenorange.online",
   description: "Інтерактивні тести та курси з Англійської.",
   openGraph: {

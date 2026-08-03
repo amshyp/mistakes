@@ -7,7 +7,7 @@ import { FormEvent, useState } from "react";
 type Props = {
   currentQuizScore: number;
   totalQuestions: number;
-  theme?: "default" | "wonderland";
+  theme?: "default" | "wonderland" | "vocabulary";
   onRestart?: () => void;
 };
 
@@ -37,12 +37,17 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const isWonderland = theme === "wonderland";
+  const isVocabulary = theme === "vocabulary";
   const resultsButtonClasses = isWonderland
     ? "inline-flex items-center rounded-full border border-violet-300/30 bg-violet-300/10 px-4 py-2 text-sm font-light text-violet-100/85 shadow-sm transition-colors hover:border-violet-300/50 hover:bg-violet-300/15 hover:text-violet-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300"
+    : isVocabulary
+      ? "inline-flex items-center rounded-full bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-600 active:bg-violet-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
     : "inline-flex items-center rounded-full bg-white/60 px-4 py-2 text-sm font-light text-slate-500 shadow-sm backdrop-blur transition-colors hover:text-slate-700";
   const inputClasses = `mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 ${
     isWonderland
       ? "focus:border-violet-700 focus:ring-4 focus:ring-violet-100"
+      : isVocabulary
+        ? "focus:border-violet-600 focus:ring-4 focus:ring-fuchsia-100"
       : "focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100"
   }`;
 
@@ -82,11 +87,11 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
 
   return (
     <>
-    <section id="contact" className={`mt-10 rounded-[1.75rem] px-5 py-10 text-white shadow-xl [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12 lg:py-10 ${isWonderland ? "bg-gradient-to-br from-indigo-950 via-violet-950 to-fuchsia-950 shadow-violet-950/25" : "bg-emerald-950 shadow-emerald-950/20"}`}>
+    <section id="contact" className={`mt-10 rounded-[1.75rem] px-5 py-10 text-white shadow-xl [overflow-anchor:none] sm:mt-14 sm:px-10 sm:py-12 lg:py-10 ${isWonderland ? "bg-gradient-to-br from-indigo-950 via-violet-950 to-fuchsia-950 shadow-violet-950/25" : isVocabulary ? "bg-gradient-to-br from-violet-950 via-purple-900 to-fuchsia-900 shadow-violet-950/20" : "bg-emerald-950 shadow-emerald-950/20"}`}>
       <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-12">
         <div>
-          <span className={`inline-flex rounded-full px-3 py-1.5 text-sm font-semibold ${isWonderland ? "bg-violet-400/15 text-violet-100" : "bg-emerald-400/15 text-emerald-100"}`}>Наступний крок</span>
-          <h2 className="mt-5 text-3xl font-black tracking-tight sm:text-4xl">Записуйтеся на безкоштовне тестове заняття-знайомство.</h2>
+          <span className={`inline-flex rounded-full px-3 py-1.5 text-sm font-semibold ${isWonderland ? "bg-violet-400/15 text-violet-100" : isVocabulary ? "bg-pink-400/15 text-pink-100" : "bg-emerald-400/15 text-emerald-100"}`}>Наступний крок</span>
+          <h2 className={`mt-5 text-3xl font-black tracking-tight sm:text-4xl ${isVocabulary ? "bg-gradient-to-r from-rose-400 via-pink-400 to-violet-400 bg-clip-text text-transparent" : ""}`}>Записуйтеся на безкоштовне тестове заняття-знайомство.</h2>
           <p className="mt-5 max-w-xl leading-7 text-slate-300">Визначимо ваш рівень англійської та складемо індивідуальний план навчання.</p>
         </div>
 
@@ -104,12 +109,12 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
                 className="mx-auto size-[105px] rounded-full bg-white object-contain shadow-lg md:size-[130px]"
               />
               <p className="mt-3 font-bold">Аліса Кириченко</p>
-              <p className={`mt-1 text-sm ${isWonderland ? "text-violet-100" : "text-emerald-100"}`}>Викладач англійської</p>
+              <p className={`mt-1 text-sm ${isWonderland || isVocabulary ? "text-violet-100" : "text-emerald-100"}`}>Викладач англійської</p>
               <a
                 href="https://t.me/alisakerry"
                 target="_blank"
                 rel="noreferrer"
-                className={`mt-5 inline-flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-bold text-white shadow-lg transition focus:outline-none focus:ring-4 ${isWonderland ? "bg-violet-600 shadow-violet-950/25 hover:bg-violet-500 focus:ring-violet-200" : "bg-orange-500 shadow-orange-700/20 hover:bg-orange-400 focus:ring-orange-200"}`}
+                className={`mt-5 inline-flex w-full items-center justify-center rounded-xl px-5 py-3.5 font-bold text-white shadow-lg transition focus:outline-none focus:ring-4 ${isWonderland ? "bg-violet-600 shadow-violet-950/25 hover:bg-violet-500 focus:ring-violet-200" : isVocabulary ? "bg-violet-600 shadow-violet-950/25 hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-600 focus:ring-blue-200 active:bg-violet-800" : "bg-orange-500 shadow-orange-700/20 hover:bg-orange-400 focus:ring-orange-200"}`}
               >
                 Написати нам у Telegram
               </a>
@@ -117,7 +122,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
           </div>
           <button
             type="button"
-            className={`mx-auto mt-3 block text-center text-sm transition hover:text-white hover:underline focus:outline-none focus:underline ${isWonderland ? "text-violet-100/80" : "text-emerald-100/80"}`}
+            className={`mx-auto mt-3 block text-center text-sm transition hover:text-white hover:underline focus:outline-none focus:underline ${isWonderland || isVocabulary ? "text-violet-100/80" : "text-emerald-100/80"}`}
             aria-expanded={isFormOpen}
             aria-controls="contact-form-panel"
             onClick={() => setIsFormOpen((isOpen) => !isOpen)}
@@ -133,7 +138,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
           >
             <div className="min-h-0 overflow-hidden">
               {submitted ? (
-                <div className={`rounded-2xl p-6 ${isWonderland ? "bg-violet-300 text-violet-950" : "bg-emerald-400 text-emerald-950"}`}>
+                <div className={`rounded-2xl p-6 ${isWonderland ? "bg-violet-300 text-violet-950" : isVocabulary ? "bg-pink-200 text-violet-950" : "bg-emerald-400 text-emerald-950"}`}>
                   <p className="text-lg font-extrabold">Дякуємо! Ми скоро з вами зв&apos;яжемося 😊</p>
                 </div>
               ) : (
@@ -151,7 +156,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
                     <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
                   </div>
                   {submitError && <p className="mt-3 text-sm font-medium text-rose-700" role="alert">{submitError}</p>}
-                  <button type="submit" disabled={isSubmitting} className={`mt-5 w-full rounded-xl px-5 py-3.5 font-bold text-white shadow-lg transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-70 ${isWonderland ? "bg-violet-600 shadow-violet-950/25 hover:bg-violet-500 focus:ring-violet-200" : "bg-orange-500 shadow-orange-700/20 hover:bg-orange-400 focus:ring-orange-200"}`}>
+                  <button type="submit" disabled={isSubmitting} className={`mt-5 w-full rounded-xl px-5 py-3.5 font-bold text-white shadow-lg transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-70 ${isWonderland ? "bg-violet-600 shadow-violet-950/25 hover:bg-violet-500 focus:ring-violet-200" : isVocabulary ? "bg-violet-600 shadow-violet-950/25 hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-600 focus:ring-blue-200 active:bg-violet-800" : "bg-orange-500 shadow-orange-700/20 hover:bg-orange-400 focus:ring-orange-200"}`}>
                     {isSubmitting ? "Надсилаємо..." : "Залишити заявку"}
                   </button>
                 </form>

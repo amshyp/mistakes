@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const comingSoonTests = [
@@ -48,6 +49,30 @@ export default function Home() {
               </div>
               <span className="mt-7 inline-flex w-fit items-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-white shadow-md shadow-orange-500/20 transition group-hover:bg-orange-600">
                 Пройти тест
+              </span>
+            </Link>
+
+            <Link
+              href="/tests/vocabulary-memes"
+              className="group flex min-w-0 flex-col rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg shadow-rose-950/5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-rose-950/10 sm:p-7"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src="/images/meme/Meme_01.png"
+                  alt="Превʼю тесту «Лексика з мемами»"
+                  fill
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) calc(100vw - 112px), calc(100vw - 88px)"
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="mt-5 text-2xl font-black leading-tight tracking-tight text-[#111827]">
+                Лексика <span className="whitespace-nowrap">з <span className="bg-gradient-to-r from-[#F43F5E] via-[#EC4899] to-[#7C3AED] bg-clip-text text-transparent">мемами</span></span>
+              </h3>
+              <p className="mt-4 flex-1 leading-7 text-slate-600">
+                Вивчайте цікаві англійські слова за допомогою мемів та коротких інтерактивних тестів.
+              </p>
+              <span className="mt-7 inline-flex w-fit items-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-white shadow-md shadow-orange-500/20 transition group-hover:bg-orange-600">
+                Почати тест
               </span>
             </Link>
 
