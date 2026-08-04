@@ -44,7 +44,7 @@ export default function VocabularyMemesPage() {
             Вивчайте живу англійську лексику через знайомі ситуації та меми.
           </p>
           <div className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-3 sm:mt-16 sm:gap-5">
-            {[["3", "питання"], ["2 хв", "на проходження"], ["100%", "корисно"]].map(([value, label]) => (
+            {[["10", "питань"], ["2 хв", "на проходження"], ["100%", "корисно"]].map(([value, label]) => (
               <div key={label} className="rounded-2xl border border-white/80 bg-white/75 px-3 py-4 text-center shadow-sm backdrop-blur sm:px-5 sm:py-5">
                 <p className="text-lg font-extrabold text-slate-950 sm:text-2xl">{value}</p>
                 <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">{label}</p>

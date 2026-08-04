@@ -100,6 +100,7 @@
 
 .imageFrame {
   position: relative;
+  aspect-ratio: 4 / 3;
   width: min(100%, 260px);
   margin-inline: auto;
   border: 5px solid white;
@@ -122,7 +123,12 @@
 
 .imageFrame::before { left: -1.1rem; top: 0.35rem; background: #f9a8d4; transform: rotate(-22deg); }
 .imageFrame::after { right: -1rem; bottom: 0.4rem; background: #bfdbfe; transform: rotate(-20deg); }
-.memeImage { border-radius: 0.85rem; }
+.memeImage {
+  border-radius: 0.85rem;
+  opacity: 0;
+  transition: opacity 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.memeImageLoaded { opacity: 1; }
 
 .englishSentence { color: #251c45; }
 .blank {
@@ -176,11 +182,12 @@
 .funNoteTitle { color: var(--meme-purple); letter-spacing: 0.1em; }
 
 .actionButton {
-  background: var(--meme-purple);
+  background-color: var(--meme-purple);
+  background-image: none;
   box-shadow: 0 10px 22px rgb(124 58 237 / 25%);
 }
-.actionButton:hover { background: linear-gradient(100deg, var(--meme-pink), var(--meme-purple)); }
-.actionButton:active { background: #6524c7; }
+.actionButton:hover { background-image: linear-gradient(100deg, var(--meme-pink), var(--meme-purple)); }
+.actionButton:active { background-color: #6524c7; background-image: none; }
 .actionButton:focus-visible { outline: 3px solid rgb(59 130 246 / 48%); outline-offset: 3px; }
 
 .resultCard {
@@ -222,6 +229,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .doodle, .imageFrame, .funNote { animation: none; }
+  .memeImage { transition: none; }
   .answerDefault { transition: none; }
   .blankReveal { animation: none; stroke-dashoffset: 0; }
 }

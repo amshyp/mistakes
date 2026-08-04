@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import type { VocabularyMemeQuestion } from "@/data/vocabularyMemes";
 import styles from "@/components/vocabulary-memes/VocabularyMemes.module.css";
 
@@ -29,6 +29,7 @@ export default function VocabularyMemeCard({
   lastVisibleOptionRef,
 }: Props) {
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const [loadedImageSrc, setLoadedImageSrc] = useState(() => questionNumber === 1 ? question.image : "");
   const progress = (questionNumber / totalQuestions) * 100;
   const [sentenceStart, sentenceEnd] = question.english.split("____");
   const blankMaskId = `blank-reveal-${question.id}`;
@@ -70,12 +71,14 @@ export default function VocabularyMemeCard({
       <div className="p-5 sm:p-8">
         <div className={styles.imageFrame}>
           <Image
+            key={question.id}
             src={question.image}
             alt={question.imageAlt}
             width={800}
             height={600}
             sizes="260px"
-            className={`${styles.memeImage} h-auto w-full`}
+            onLoad={() => setLoadedImageSrc(question.image)}
+            className={`${styles.memeImage} ${loadedImageSrc === question.image ? styles.memeImageLoaded : ""} h-auto w-full`}
           />
         </div>
 
@@ -137,7 +140,7 @@ export default function VocabularyMemeCard({
                   type="button"
                   className={`touch-manipulation flex w-full min-w-0 select-none items-start gap-4 rounded-2xl border px-4 py-4 text-left text-base transition sm:px-5 ${stateClasses}`}
                   onClick={() => onSelectAnswer(index)}
-                  disabled={isCorrect}
+                  disabled={optionIsCorrect}
                 >
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold">
                     {optionIsCorrect ? "✓" : optionIsWrong ? "×" : String.fromCharCode(65 + index)}
@@ -145,7 +148,7 @@ export default function VocabularyMemeCard({
                   <span className="min-w-0 flex-1 break-words font-semibold leading-6">
                     {option.label}
                     {optionIsWrong && option.explanation && (
-                      <span className="animate-[fadeIn_250ms_ease-out] font-normal"> — це {option.explanation}</span>
+                      <span className="animate-[fadeIn_250ms_ease-out] font-normal"> — {option.explanation}</span>
                     )}
                   </span>
                 </button>

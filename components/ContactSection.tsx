@@ -9,7 +9,10 @@ type Props = {
   totalQuestions: number;
   theme?: "default" | "wonderland" | "vocabulary";
   onRestart?: () => void;
+  restartLabel?: string;
 };
+
+const vocabularyResultsButtonClasses = "inline-flex items-center rounded-full bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-600 active:bg-violet-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500";
 
 type ContactPayload = {
   name: string;
@@ -31,7 +34,7 @@ function buildContactPayload(form: HTMLFormElement, currentQuizScore: number, to
   };
 }
 
-export default function ContactSection({ currentQuizScore, totalQuestions, theme = "default", onRestart }: Props) {
+export default function ContactSection({ currentQuizScore, totalQuestions, theme = "default", onRestart, restartLabel = "Спробувати ще раз" }: Props) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +44,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
   const resultsButtonClasses = isWonderland
     ? "inline-flex items-center rounded-full border border-violet-300/30 bg-violet-300/10 px-4 py-2 text-sm font-light text-violet-100/85 shadow-sm transition-colors hover:border-violet-300/50 hover:bg-violet-300/15 hover:text-violet-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300"
     : isVocabulary
-      ? "inline-flex items-center rounded-full bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gradient-to-r hover:from-pink-500 hover:to-violet-600 active:bg-violet-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+      ? vocabularyResultsButtonClasses
     : "inline-flex items-center rounded-full bg-white/60 px-4 py-2 text-sm font-light text-slate-500 shadow-sm backdrop-blur transition-colors hover:text-slate-700";
   const inputClasses = `mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 ${
     isWonderland
@@ -173,7 +176,7 @@ export default function ContactSection({ currentQuizScore, totalQuestions, theme
           onClick={onRestart}
           className={resultsButtonClasses}
         >
-          Спробувати ще раз
+          {restartLabel}
         </button>
       )}
       <Link

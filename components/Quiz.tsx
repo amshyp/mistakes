@@ -75,6 +75,17 @@ export default function Quiz({ questions, lastVisibleOptionRef }: Props) {
     }
   }
 
+  function handleRestart() {
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setScore(0);
+    setCompletedQuestions(0);
+
+    window.requestAnimationFrame(() => {
+      document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   if (questions.length === 0) {
     return null;
   }
@@ -93,7 +104,12 @@ export default function Quiz({ questions, lastVisibleOptionRef }: Props) {
             <p className="text-base font-medium">{resultMessage}</p>
           </div>
         </section>
-        <ContactSection currentQuizScore={score} totalQuestions={questions.length} />
+        <ContactSection
+          currentQuizScore={score}
+          totalQuestions={questions.length}
+          onRestart={handleRestart}
+          restartLabel="Спробувати ще"
+        />
       </>
     );
   }
